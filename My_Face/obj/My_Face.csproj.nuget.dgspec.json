@@ -1,24 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Begota\\Documents\\GitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj": {}
+    "E:\\gitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Begota\\Documents\\GitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj": {
+    "E:\\gitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Begota\\Documents\\GitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj",
+        "projectUniqueName": "E:\\gitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj",
         "projectName": "My_Face",
-        "projectPath": "C:\\Users\\Begota\\Documents\\GitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj",
-        "packagesPath": "C:\\Users\\Begota\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Begota\\Documents\\GitHub\\NBP_1_i_2\\My_Face\\obj\\",
+        "projectPath": "E:\\gitHub\\NBP_1_i_2\\My_Face\\My_Face.csproj",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
+        "outputPath": "E:\\gitHub\\NBP_1_i_2\\My_Face\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Begota\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -43,10 +45,6 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
-            "Neo4j.Driver": {
-              "target": "Package",
-              "version": "[1.7.2, )"
-            },
             "Neo4jClient": {
               "target": "Package",
               "version": "[3.2.0.2, )"

@@ -12,6 +12,13 @@ using System.Threading.Tasks;
 
 namespace My_Face.Pages
 {
+    public class User
+    {
+        public String login { get; set; }
+        public String name { get; set; }
+        public String password { get; set; }
+
+    }
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -26,16 +33,22 @@ namespace My_Face.Pages
         {
             IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
+            try
+            {
 
             client = new BoltGraphClient(driver: driver);
             
-            try
-            {
                 client.Connect();
+            var query = new Neo4jClient.Cypher.CypherQuery("MATCH (tom {name: \"Tom Hanks\"}) RETURN tom",
+                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+
+            List<User> users = ((IRawGraphClient)client).ExecuteGetCypherResults<User>(query).ToList();
+            Console.WriteLine(users[0].name);
+
             }
             catch (Exception exc)
             {
-                //MessageBox.Show(exc.Message);
+                Console.WriteLine("greska");
             }
         }
     }

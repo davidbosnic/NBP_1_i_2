@@ -10,5 +10,6 @@ namespace My_Face.Model
         public int ID { get; set; }
         public String Tekst { get; set; }
         public String Slika { get; set; }
+        public DateTime DatumObjave { get; set; }
     }
 }

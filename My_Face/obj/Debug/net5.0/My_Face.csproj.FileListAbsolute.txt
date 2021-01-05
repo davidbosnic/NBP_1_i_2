@@ -172,3 +172,6 @@ E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Stranica\ProfilStranice
 E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\bundleconfig.json
 E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutStranica.cshtml.g.cs
 E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutPrijatelji.cshtml.g.cs
+E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutPocetna.cshtml.g.cs
+E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Prijatelji\Chat.cshtml.g.cs
+E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Prijatelji\Obavestenja.cshtml.g.cs

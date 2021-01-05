@@ -1,4 +1,74 @@
 ﻿@page
 @model My_Face.Pages.Pocetna_stranica.IzmeniProfilModel
 @{
+    Layout = "_LayoutPocetna";
 }
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section BrojPratilaca{
+
+}
+<form method="post">
+    <div class="form-group">
+        <input type="hidden" class="form-control" asp-for="Korisnik.ID" placeholder="SpongeBob">
+    </div>
+    <div class="form-group">
+        <label for="inputName">Ime</label>
+        <input type="text" class="form-control" asp-for="Korisnik.Ime" placeholder="SpongeBob">
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Prezime</label>
+        <input type="text" class="form-control" asp-for="Korisnik.Prezime" placeholder="Squarepants">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input disabled type="email" class="form-control" id="inputEmail4" asp-for="Korisnik.Email" placeholder="Email">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Sifra</label>
+            <input type="password" class="form-control" id="inputPassword4" asp-for="Korisnik.Sifra" placeholder="Sifra">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Datum rodjenja</label>
+        <input type="date" class="form-control" asp-for="Korisnik.DatumRodjenja" placeholder="MM/dd/yyyy">
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Adresa</label>
+        <input type="text" class="form-control" id="inputAddress" asp-for="Korisnik.Adresa" placeholder="rue de Bellville, 22">
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">URL slike</label>
+        <input type="url" class="form-control" id="inputAddress" asp-for="Korisnik.Slika" placeholder="URL slike">
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">URL slike pozadine</label>
+        <input type="url" class="form-control" id="inputAddress" asp-for="Korisnik.SlikaPozadine" placeholder="URL slike">
+    </div>
+
+
+    <button type="submit" asp-page-handler="Promeni" class="btn btn-primary">Promeni</button>
+</form>

@@ -5,8 +5,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>My_Face</ActiveDebugProfile>
-    <RazorPage_SelectedScaffolderID>RazorPagesLayoutScaffolder</RazorPage_SelectedScaffolderID>
-    <RazorPage_SelectedScaffolderCategoryPath>root/Layouts</RazorPage_SelectedScaffolderCategoryPath>
+    <RazorPage_SelectedScaffolderID>RazorPageScaffolder</RazorPage_SelectedScaffolderID>
+    <RazorPage_SelectedScaffolderCategoryPath>root/Common/RazorPage</RazorPage_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_EnablerDialogWidth>600</WebStackScaffolding_EnablerDialogWidth>
   </PropertyGroup>
 </Project>

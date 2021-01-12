@@ -12,6 +12,5 @@ namespace My_Face.Model
         public bool Lajkovano { get; set; }
         public bool MojaObjava { get; set; }
         public bool PodeljenaObjava { get; set; }
-        public IDictionary<String, String> Komentari { get; set; }
     }
 }

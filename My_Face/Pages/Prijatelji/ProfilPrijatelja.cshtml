@@ -2,3 +2,31 @@
 @model My_Face.Pages.Prijatelji.ProfilPrijateljaModel
 @{
 }
+
+
+<div class="container">
+    <form method="post">
+        <img src="@Model.zaPrikaz.Slika" />
+        <div>@Model.zaPrikaz.Ime</div>
+        <div>@Model.zaPrikaz.Prezime</div>
+        <div>@Model.zaPrikaz.DatumRodjenja</div>
+        <div>@Model.zaPrikaz.Adresa</div>
+        <input type="submit" asp-page-handler="Dodaj" asp-route-id="@Model.zaPrikaz.ID" value="dodaj" />
+        <input type="submit" asp-page-handler="Obrisi" asp-route-id="@Model.zaPrikaz.ID" value="obrisi" />
+        <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
+        <input type="submit" asp-page-handler="Odprati" asp-route-id="@Model.zaPrikaz.ID" value="odprati" />
+        <input type="submit" asp-page-handler="Blokiraj" asp-route-id="@Model.zaPrikaz.ID" value="blokiraj" />
+
+        @foreach (var item in Model.objaveZaPrikaz)
+        {
+            <div>@item.DatumObjave</div>
+            <div>@item.Tekst</div>
+            <div>@item.Slika</div>
+            <button asp-page-handler="Lajkuj" asp-route-id="@item.ID">Like</button>
+            <button asp-page-handler="Unlajkuj" asp-route-id="@item.ID">Unlike</button>
+            <button asp-page-handler="Podeli" asp-route-id="@item.ID">Podeli</button>
+            <label>Kommentarisi :</label>
+            <input type="text" />
+        }
+    </form>
+</div>

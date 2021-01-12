@@ -2,3 +2,10 @@
 @model My_Face.Pages.Pocetna_stranica.ObjaviModel
 @{
 }
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <input type="text" asp-for="TekstObjave" />
+        <input type="file" asp-for="Slika" />
+        <button type="submit" asp-page-handler="Objavi">Objavi</button>
+    </form>
+</div>

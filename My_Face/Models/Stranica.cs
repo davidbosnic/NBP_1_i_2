@@ -11,5 +11,6 @@ namespace My_Face.Model
         public String Naziv { get; set; }
         public DateTime DatumKreiranja { get; set; }
         public String Slika { get; set; }
+        public String SlikaPozadina { get; set; }
     }
 }

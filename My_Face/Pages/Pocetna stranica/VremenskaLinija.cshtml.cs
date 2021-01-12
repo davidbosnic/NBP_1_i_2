@@ -17,12 +17,12 @@ namespace My_Face.Pages.Pocetna_stranica
         public Korisnik Korisnik { get; set; }
         public List<Objava> Objave { get; set; }
         public Dictionary<int, List<Komentar>> KomentariZaObjave;
-        [BindProperty(SupportsGet =true)]
+        [BindProperty(SupportsGet = true)]
         public String Komentarcic { get; set; }
 
         public int BrojPratilaca()
         {
-            var queryKorisnik = new Neo4jClient.Cypher.CypherQuery("MATCH (n)<-[r:KORISNIKKORISNIK]-(m) WHERE n.ID="+Korisnik.ID+ " and r.Pratilac=true RETURN count(m) as count", new Dictionary<string, object>(), CypherResultMode.Set);
+            var queryKorisnik = new Neo4jClient.Cypher.CypherQuery("MATCH (n)<-[r:KORISNIKKORISNIK]-(m) WHERE n.ID=" + Korisnik.ID + " and r.Pratilac=true RETURN count(m) as count", new Dictionary<string, object>(), CypherResultMode.Set);
             int rez = ((IRawGraphClient)client).ExecuteGetCypherResults<int>(queryKorisnik).FirstOrDefault();
             return rez;
         }
@@ -50,7 +50,7 @@ namespace My_Face.Pages.Pocetna_stranica
 
                 foreach (var item in Objave)
                 {
-                    var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID+" return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                    var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
                     List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
                     KomentariZaObjave.Add(item.ID, pomKom);
                 }
@@ -62,7 +62,7 @@ namespace My_Face.Pages.Pocetna_stranica
         }
         public async Task<IActionResult> OnPostKomentarisi(int id)
         {
-            var query = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik), (b: Objava) WHERE a.ID = " + Korisnik.ID + " AND b.ID = " + id + " CREATE(a) -[r:KOMENTAR{DatumPostavljanja:"+DateTime.Now.ToString("MM/dd/yyyy")+", Tekst:'"+Komentarcic+"'}]->(b)", new Dictionary<string, object>(), CypherResultMode.Set);
+            var query = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik), (b: Objava) WHERE a.ID = " + Korisnik.ID + " AND b.ID = " + id + " CREATE(a) -[r:KOMENTAR{DatumPostavljanja:" + DateTime.Now.ToString("MM/dd/yyyy") + ", Tekst:'" + Komentarcic + "'}]->(b)", new Dictionary<string, object>(), CypherResultMode.Set);
             ((IRawGraphClient)client).ExecuteCypher(query);
             return Page();
         }

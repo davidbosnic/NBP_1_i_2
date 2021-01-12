@@ -2,3 +2,29 @@
 @model My_Face.Pages.Stranica.ProfilStraniceModel
 @{
 }
+
+
+<div class="container">
+    <form method="post">
+        <img src="@Model.zaPrikaz.Slika" />
+        <div>@Model.zaPrikaz.Naziv</div>
+        <div>@Model.zaPrikaz.DatumKreiranja</div>
+        <input type="submit" asp-page-handler="LajkujStranicu" asp-route-id="@Model.zaPrikaz.ID" value="like" />
+        <input type="submit" asp-page-handler="UnlajkujStranicu" asp-route-id="@Model.zaPrikaz.ID" value="unlike" />
+        <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
+        <input type="submit" asp-page-handler="Odprati" asp-route-id="@Model.zaPrikaz.ID" value="odprati" />
+        @*<input type="submit" asp-page-handler="Blokiraj" asp-route-id="@Model.zaPrikaz.ID" value="blokiraj" />*@
+
+        @foreach (var item in Model.objaveZaPrikaz)
+        {
+            <div>@item.DatumObjave</div>
+            <div>@item.Tekst</div>
+            <div>@item.Slika</div>
+            <button asp-page-handler="Lajkuj" asp-route-id="@item.ID">Like</button>
+            <button asp-page-handler="Unlajkuj" asp-route-id="@item.ID">Unlike</button>
+            <button asp-page-handler="Podeli" asp-route-id="@item.ID">Podeli</button>
+            <label>Kommentarisi :</label>
+            <input type="text" />
+        }
+    </form>
+</div>

@@ -12,4 +12,12 @@ namespace My_Face.Model
         public DateTime DatumPostavljanja { get; set; }
         public String Tekst { get; set; }
     }
+
+    public class KomentarStr
+    {
+        public Stranica Stranica { get; set; }
+        public Objava Objava { get; set; }
+        public DateTime DatumPostavljanja { get; set; }
+        public String Tekst { get; set; }
+    }
 }

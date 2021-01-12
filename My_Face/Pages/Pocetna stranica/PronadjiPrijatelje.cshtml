@@ -2,3 +2,27 @@
 @model My_Face.Pages.Pocetna_stranica.PronadjiPrijateljeModel
 @{
 }
+
+
+<div class="container">
+    <form method="post">
+        <label>String za pretragu :</label>
+        <input type="text" />
+        <button type="submit" asp-page-handler="Pretrazi">Pretrazi</button>
+    </form>
+
+    <form method="post">
+        <div>@Model.ErrorMessage</div>
+        @foreach (var item in Model.ListaKorisnika)
+        {
+            <div>
+                <img @item.Slika />
+                <div>@item.Ime</div>
+                <div>@item.Prezime</div>
+                <div>@item.DatumRodjenja</div>
+                <a asp-page="PogledajKorisnika" asp-route-id="@item.ID">Pogledaj profil</a>
+                <button type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
+            </div>
+        }
+    </form>
+</div>

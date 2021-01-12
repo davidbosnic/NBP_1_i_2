@@ -2,3 +2,17 @@
 @model My_Face.Pages.Stranica.ListaLajkovanihStranicaModel
 @{
 }
+
+
+<div class="container">
+    <form>
+        @foreach (var item in @Model.zaPrikaz)
+        {
+            <div>
+                <div>@item.Naziv</div>
+                <div>@item.Slika</div>
+                <a asp-page="ProfilStranice" asp-route-id="@item.ID">pogledaj stranicu</a>
+            </div>
+        }
+    </form>
+</div>

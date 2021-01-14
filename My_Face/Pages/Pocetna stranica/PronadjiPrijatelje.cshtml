@@ -39,25 +39,28 @@
                 <p> String za pretragu : </p>
             </div>
             <input type="text" asp-for="SearchString" class="form-control" placeholder="">
-            <a class="btn text-red" asp-page-handler="Pretrazi">Pretrazi</a>
+            <button type="submit" class="btn text-red" asp-page-handler="Pretrazi">Pretrazi</button>
         </form>
     </div>
 
     <form method="post">
         <div>
             <div>@Model.ErrorMessage</div>
-            @foreach (var item in Model.ListaKorisnika)
-            {
-                <!--Post Date-->
-                <div class="post-date hidden-xs hidden-sm">
-                    <h5>@item.Ime</h5>
-                    <div>@item.Prezime</div>
-                    <div>@item.DatumRodjenja</div>
-                </div><!--Post Date End-->
-                <div>
-                    <a class="btn text-red" asp-page="PogledajKorisnika" asp-route-id="@item.ID">Pogledaj profil</a>
-                    <button class="btn btn-primary" type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
-                </div>
+            @if (Model.ListaKorisnika != null)
+            { 
+                @foreach (var item in Model.ListaKorisnika)
+                {
+                    <!--Post Date-->
+                    <div class="post-date hidden-xs hidden-sm">
+                        <h5>@item.Ime</h5>
+                        <div>@item.Prezime</div>
+                        <div>@item.DatumRodjenja</div>
+                    </div><!--Post Date End-->
+                    <div>
+                        <a class="btn text-red" asp-page="/Prijatelji/ProfilPrijatelja" asp-route-id="@item.ID">Pogledaj profil</a>
+                        <button class="btn btn-primary" type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
+                    </div>
+                }
             }
         </div>
     </form>

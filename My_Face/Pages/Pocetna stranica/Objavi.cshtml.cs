@@ -46,7 +46,7 @@ namespace My_Face.Pages.Pocetna_stranica
 
                     //Console.WriteLine(objava[0].Tekst);
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "'  RETURN a",
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + "  RETURN a",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();

@@ -58,21 +58,21 @@ namespace My_Face.Pages.Prijatelji
                     {
                         client = new BoltGraphClient(driver: driver);
                         client.Connect();
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + id + "'return n",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = " + id + " return n",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
 
                         List<Korisnik> k = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
 
                         zaPrikaz = k[0];
 
-                        var query33 = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "'return n",
+                        var query33 = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = " + idLog + " return n",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
 
                         List<Korisnik> k1 = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query33).ToList();
 
                         Korisnik = k1[0];
 
-                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = '" + id + "' and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = " + id + " and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
                         objaveZaPrikaz = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 

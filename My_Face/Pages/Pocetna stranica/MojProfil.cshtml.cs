@@ -54,14 +54,14 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
-                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "' return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = " + idLog + " return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> k = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
 
                     zaPrikaz = k[0];
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = '" + idLog + "' and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = " + idLog + " and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                     List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 

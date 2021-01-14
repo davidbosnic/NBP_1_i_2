@@ -23,6 +23,10 @@ namespace My_Face.Pages.Pocetna_stranica
 
         public string ErrorMessage { get; set; }
 
+        [BindProperty]
+
+        public Korisnik Korisnik { get; set; }
+
 
         public string getUserString(string param)
         {
@@ -48,6 +52,14 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
+
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "'  RETURN a",
+                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
+
+                    List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
+                    Korisnik = pom[0];
+
+
                     string maxIdPom = getMaxId();
 
                     string searchStr = ".*" + HttpContext.Session.GetString("SearchString") + ".*";

@@ -1,10 +1,38 @@
 ﻿@page
 @model My_Face.Pages.Prijatelji.ProfilPrijateljaModel
 @{
+    Layout = "_LayoutPocetna";
+}
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section BrojPratilaca{
+
 }
 
 
-<div class="container">
+@*<div class="container">
     <form method="post">
         <img src="@Model.zaPrikaz.Slika" />
         <div>@Model.zaPrikaz.Ime</div>
@@ -29,4 +57,75 @@
             <input type="text" />
         }
     </form>
-</div>
+</div>*@
+
+<form method="post">
+    <div class="post-content">
+        <img src="@Model.zaPrikaz.Slika" />
+        <div>@Model.zaPrikaz.Ime</div>
+        <div>@Model.zaPrikaz.Prezime</div>
+        <div>@Model.zaPrikaz.DatumRodjenja</div>
+        <div>@Model.zaPrikaz.Adresa</div>
+        <div class="reaction">
+
+            <input type="submit" asp-page-handler="Dodaj" asp-route-id="@Model.zaPrikaz.ID" value="dodaj" />
+            <input type="submit" asp-page-handler="Obrisi" asp-route-id="@Model.zaPrikaz.ID" value="obrisi" />
+            <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
+            <input type="submit" asp-page-handler="Odprati" asp-route-id="@Model.zaPrikaz.ID" value="odprati" />
+            <input type="submit" asp-page-handler="Blokiraj" asp-route-id="@Model.zaPrikaz.ID" value="blokiraj" />
+        </div>
+
+    </div>
+</form>
+
+
+@foreach (var item in Model.objaveZaPrikaz)
+{
+    <form method="post">
+        <div class="post-content">
+
+            <!--Post Date-->
+            <div class="post-date hidden-xs hidden-sm">
+                <h5>@Model.zaPrikaz.Ime</h5>
+                <p class="text-grey">@item.DatumObjave</p>
+            </div><!--Post Date End-->
+
+            <img src="@item.Slika" alt="post-image" class="img-responsive post-image" />
+            <div class="post-container">
+                <img src="@Model.zaPrikaz.Slika" alt="user" class="profile-photo-md pull-left" />
+                <div class="post-detail">
+                    <div class="user-info">
+                        <h5><a href="timeline.html" class="profile-link">@Model.zaPrikaz.Ime @Model.zaPrikaz.Prezime</a> <span class="following">following</span></h5>
+                    </div>
+                    <div class="reaction">
+
+                        <a class="btn text-green" asp-route-id="@item.ID" asp-page-handler="Lajkuj"><i class="icon ion-thumbsup"></i></a>
+                        <p>@item.Lajkova</p>
+                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Unlajkuj"><i class="fa fa-thumbs-down"></i></a>
+                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Podeli">Podeli</a>
+                    </div>
+                    <div class="line-divider"></div>
+                    <div class="post-text">
+                        <p> @item.Tekst </p>
+                    </div>
+                    <div class="line-divider"></div>
+
+                    @foreach (var item2 in @Model.KomentariZaObjave.GetValueOrDefault(item.ID))
+                    {
+                        <div class="post-comment">
+                            <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
+                            <p><a href="timeline.html" class="profile-link">@item2.Korisnik.Ime </a> @item2.Tekst</p>
+                        </div>
+                    }
+
+                    <div class="post-comment">
+                        <img src="@Model.zaPrikaz.Slika" alt="" class="profile-photo-sm" />
+                        <input type="text" asp-for="Komentar" class="form-control" placeholder="Post a comment">
+                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}

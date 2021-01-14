@@ -1,28 +1,64 @@
 ﻿@page
 @model My_Face.Pages.Pocetna_stranica.PronadjiPrijateljeModel
 @{
+    Layout = "_LayoutPocetna";
+}
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section BrojPratilaca{
+
 }
 
 
 <div class="container">
-    <form method="post">
-        <label>String za pretragu :</label>
-        <input type="text" />
-        <button type="submit" asp-page-handler="Pretrazi">Pretrazi</button>
-    </form>
+    <div class="post-content">
+        <form method="post">
+            <div class="post-text">
+                <p> String za pretragu : </p>
+            </div>
+            <input type="text" asp-for="SearchString" class="form-control" placeholder="">
+            <a class="btn text-red" asp-page-handler="Pretrazi">Pretrazi</a>
+        </form>
+    </div>
 
     <form method="post">
-        <div>@Model.ErrorMessage</div>
-        @foreach (var item in Model.ListaKorisnika)
-        {
-            <div>
-                <img @item.Slika />
-                <div>@item.Ime</div>
-                <div>@item.Prezime</div>
-                <div>@item.DatumRodjenja</div>
-                <a asp-page="PogledajKorisnika" asp-route-id="@item.ID">Pogledaj profil</a>
-                <button type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
-            </div>
-        }
+        <div>
+            <div>@Model.ErrorMessage</div>
+            @foreach (var item in Model.ListaKorisnika)
+            {
+                <!--Post Date-->
+                <div class="post-date hidden-xs hidden-sm">
+                    <h5>@item.Ime</h5>
+                    <div>@item.Prezime</div>
+                    <div>@item.DatumRodjenja</div>
+                </div><!--Post Date End-->
+                <div>
+                    <a class="btn text-red" asp-page="PogledajKorisnika" asp-route-id="@item.ID">Pogledaj profil</a>
+                    <button class="btn btn-primary" type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
+                </div>
+            }
+        </div>
     </form>
 </div>

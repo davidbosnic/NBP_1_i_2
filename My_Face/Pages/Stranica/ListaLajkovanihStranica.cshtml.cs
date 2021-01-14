@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using My_Face.Model;
 using Neo4j.Driver.V1;
 using Neo4jClient;
 using Neo4jClient.Cypher;
@@ -20,6 +21,10 @@ namespace My_Face.Pages.Stranica
 
         public BoltGraphClient client { get; set; }
 
+        [BindProperty]
+
+        public Korisnik Korisnik { get; set; }
+
 
 
         public async Task<IActionResult> OnGet()
@@ -34,6 +39,12 @@ namespace My_Face.Pages.Stranica
                 {
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
+
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "'  RETURN a",
+                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
+
+                    List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
+                    Korisnik = pom[0];
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikStranica]->(b:Stranica) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' and r.Lajkovao=true  RETURN b",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);

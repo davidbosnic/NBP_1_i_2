@@ -1,11 +1,41 @@
 ﻿@page
 @model My_Face.Pages.Pocetna_stranica.ObjaviModel
 @{
+    Layout = "_LayoutPocetna";
 }
-<div class="container">
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section BrojPratilaca{
+
+}
+<div class="post-content">
     <form method="post" enctype="multipart/form-data">
-        <input type="text" asp-for="TekstObjave" />
-        <input type="file" asp-for="Slika" />
-        <button type="submit" asp-page-handler="Objavi">Objavi</button>
+        <div class="post-comment">
+            <input type="text" asp-for="TekstObjave" class="form-control" placeholder="Napisite tekst objave">
+            <input type="file" asp-for="Slika" />
+            <button class="btn text-red" type="submit" asp-page-handler="Objavi">Objavi</button>
+        </div>
     </form>
 </div>

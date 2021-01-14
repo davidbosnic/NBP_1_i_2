@@ -1,18 +1,55 @@
 ﻿@page
 @model My_Face.Pages.Stranica.ListaLajkovanihStranicaModel
 @{
+    Layout = "_LayoutPocetna";
+}
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
 }
 
 
-<div class="container">
-    <form>
-        @foreach (var item in @Model.zaPrikaz)
-        {
-            <div>
-                <div>@item.Naziv</div>
-                <div>@item.Slika</div>
-                <a asp-page="ProfilStranice" asp-route-id="@item.ID">pogledaj stranicu</a>
-            </div>
-        }
-    </form>
-</div>
+<form method="post">
+    <div class="friend-list">
+        <div class="row">
+            @if (Model.zaPrikaz != null)
+            {
+                @foreach (var item in Model.zaPrikaz)
+                {
+                    <div class="col-md-6 col-sm-6">
+                        <div class="friend-card">
+                            <div class="card-info">
+                                <img src=@item.Slika alt="user" class="profile-photo-lg" />
+                                <div class="friend-info">
+                                    <a href="#" class="pull-right text-green">My Friend</a>
+                                    <h5><a href="#" class="profile-link">@item.Naziv</a></h5>
+                                    <a class="btn btn-primary" asp-page="ProfilStranice" asp-route-id="@item.ID">Pogledaj stranicu</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</form>

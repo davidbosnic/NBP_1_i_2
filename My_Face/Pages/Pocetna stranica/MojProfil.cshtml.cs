@@ -28,6 +28,11 @@ namespace My_Face.Pages.Pocetna_stranica
         [BindProperty]
         public String ErrorMessage { get; set; }
 
+        public Dictionary<int, List<Komentar>> KomentariZaObjave;
+
+        [BindProperty]
+        public String Komentar { get; set; }
+
         public MojProfilModel()
         {
             ErrorMessage = "";
@@ -49,7 +54,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
-                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "'return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "' return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> k = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
@@ -59,6 +64,15 @@ namespace My_Face.Pages.Pocetna_stranica
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = '" + idLog + "' and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                     List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
+
+                    KomentariZaObjave = new Dictionary<int, List<Komentar>>();
+
+                    foreach (var item in o)
+                    {
+                        var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                        List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
+                        KomentariZaObjave.Add(item.ID, pomKom);
+                    }
 
                 }
                 catch (Exception exc)

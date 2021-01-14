@@ -28,6 +28,14 @@ namespace My_Face.Pages.Prijatelji
         [BindProperty]
         public String ErrorMessage { get; set; }
 
+        [BindProperty]
+        public Korisnik Korisnik { get; set; }
+
+        [BindProperty]
+        public string Komentar { get; set; }
+
+        public Dictionary<int, List<Komentar>> KomentariZaObjave;
+
         public ProfilPrijateljaModel()
         {
             ErrorMessage = "";
@@ -57,10 +65,25 @@ namespace My_Face.Pages.Prijatelji
 
                         zaPrikaz = k[0];
 
+                        var query33 = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "'return n",
+                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        List<Korisnik> k1 = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query33).ToList();
+
+                        Korisnik = k1[0];
+
                         var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KorisnikObjava]->(b:Objava) WHERE a.ID = '" + id + "' and (r.MojaObjava = true or r.PodeljenaObjava = true) return b",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
                         objaveZaPrikaz = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 
+                        KomentariZaObjave = new Dictionary<int, List<Komentar>>();
+
+                        foreach (var item in objaveZaPrikaz)
+                        {
+                            var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                            List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
+                            KomentariZaObjave.Add(item.ID, pomKom);
+                        }
                     }
                     catch (Exception exc)
                     {

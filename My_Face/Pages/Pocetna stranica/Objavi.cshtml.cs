@@ -20,6 +20,10 @@ namespace My_Face.Pages.Pocetna_stranica
         [BindProperty]
         public IFormFile Slika { get; set; }
 
+        [BindProperty] 
+        
+        public Korisnik Korisnik { get; set; }
+
         public BoltGraphClient client { get; set; }
 
         public string getUserString(string param)
@@ -33,6 +37,26 @@ namespace My_Face.Pages.Pocetna_stranica
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
+                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+
+                try
+                {
+                    client = new BoltGraphClient(driver: driver);
+                    client.Connect();
+
+                    //Console.WriteLine(objava[0].Tekst);
+
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "'  RETURN a",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+
+                    List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
+                    Korisnik = pom[0];
+
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("greska");
+                }
                 return Page();
             }
             else

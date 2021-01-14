@@ -57,14 +57,14 @@ namespace My_Face.Pages.Pocetna_stranica
                     var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:'" + maxIdPom + "', Tekst:'" + TekstObjave + "', Slika:'" + Slika.FileName + "', Datum: '" + DateTime.Now.ToString() + "'}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
-                    List<Objava> objava = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query).ToList();
+                    ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);
 
-                    Console.WriteLine(objava[0].Tekst);
+                    //Console.WriteLine(objava[0].Tekst);
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + maxIdPom + "' CREATE (a)-[r: KorisnikObjava {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN type(r)",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
-                    List<KorisnikObjava> korisnikOvjava = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2).ToList();
+                    ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
 
                 }
                 catch (Exception exc)

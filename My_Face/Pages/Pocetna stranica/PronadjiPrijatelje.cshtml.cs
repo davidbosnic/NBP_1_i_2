@@ -32,6 +32,7 @@ namespace My_Face.Pages.Pocetna_stranica
         public PronadjiPrijateljeModel()
         {
             ErrorMessage = "";
+            HttpContext.Session.SetString("SearchString","");
         }
 
         public async Task<IActionResult> OnGet()
@@ -54,10 +55,11 @@ namespace My_Face.Pages.Pocetna_stranica
                     Dictionary<string, object> queryDict = new Dictionary<string, object>();
                     queryDict.Add("srstr", searchStr);
 
-                    var query = new Neo4jClient.Cypher.CypherQuery("where (n:Korisnik) and exists(n.Ime) and (n.Ime =~ {srstr} or n.Prezime =~ {srstr}) return n",
+                    //potencijalno mozda da se ubaci da se ovde ne prikazu blokirani ?
+                    var query = new Neo4jClient.Cypher.CypherQuery("where (n:Korisnik) and (n.Ime =~ {srstr} or n.Prezime =~ {srstr}) return n",
                                                                queryDict, CypherResultMode.Projection);
 
-                    List<Korisnik> actors = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
+                    ListaKorisnika = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
                 }
                 catch (Exception exc)
                 {
@@ -69,7 +71,7 @@ namespace My_Face.Pages.Pocetna_stranica
             }
             else
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("../Index");
             }
         }
 
@@ -84,7 +86,7 @@ namespace My_Face.Pages.Pocetna_stranica
             }
             else
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("../Index");
             }
         }
 
@@ -106,31 +108,41 @@ namespace My_Face.Pages.Pocetna_stranica
 
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(q).ToList();
 
-                    if (pom[0] != null)
+                    //da li sam u pravu da mora da ima po dve veze za svako prijateljstvo ?
+                    if (pom[0] == null)
                     {
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "' CREATE (a)-[r: KorisnikKorisnik {Prijatelj:true,Pratilac:true,Blokiran:false}]->(b) RETURN type(r)",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "' CREATE (a)-[r: KorisnikKorisnik {Prijatelj:true,Pratilac:false,Blokiran:false}]->(b) RETURN type(r)",
+                                                                 new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query).ToList();
+
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "' CREATE (b)-[r: KorisnikKorisnik {Prijatelj:true,Pratilac:false,Blokiran:false}]->(a) RETURN type(r)",
+                                                                new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query2).ToList();
+                        ErrorMessage = "";
+                    }
+                    else
+                    {
+                        //ovo valjda pokriva obostranu vezu
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikKorisnik]-(b:Korisnik) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "' SET r.Prijatelj=true RETURN a",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query).ToList();
                         ErrorMessage = "";
                     }
-                    else
-                    {
-                        ErrorMessage = "Vec ste prijatelji sa odabranim korisnikom!";
-                    }
 
 
-                    return RedirectToPage();
                 }
                 catch (Exception exc)
                 {
                     Console.WriteLine("greska");
                 }
-                return RedirectToPage();
+                return Page();
             }
             else
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("../Index");
             }
         }
 

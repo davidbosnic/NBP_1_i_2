@@ -114,7 +114,7 @@ namespace My_Face.Pages.Pocetna_stranica
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
 
-                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikKorisnik]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = '" + id + "'  RETURN a",
+                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = '" + id + "'  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(q).ToList();
@@ -122,12 +122,12 @@ namespace My_Face.Pages.Pocetna_stranica
                     //da li sam u pravu da mora da ima po dve veze za svako prijateljstvo ?
                     if (pom[0] == null)
                     {
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (a)-[r: KorisnikKorisnik {Prijatelj:true,Pratilac:false,Blokiran:false}]->(b) RETURN type(r)",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (a)-[r: KORISNIKKORISNIK {Prijatelj:true,Pratilac:false,Blokiran:false}]->(b) RETURN r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query).ToList();
 
-                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (b)-[r: KorisnikKorisnik {Prijatelj:true,Pratilac:false,Blokiran:false}]->(a) RETURN type(r)",
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (b)-[r: KORISNIKKORISNIK {Prijatelj:true,Pratilac:false,Blokiran:false}]->(a) RETURN r",
                                                                 new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query2).ToList();
@@ -136,10 +136,10 @@ namespace My_Face.Pages.Pocetna_stranica
                     else
                     {
                         //ovo valjda pokriva obostranu vezu
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikKorisnik]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " SET r.Prijatelj=true RETURN a",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " SET r.Prijatelj=true RETURN a",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
-                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(query).ToList();
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();
                         ErrorMessage = "";
                     }
 

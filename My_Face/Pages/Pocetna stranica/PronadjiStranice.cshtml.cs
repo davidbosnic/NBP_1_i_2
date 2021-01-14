@@ -114,14 +114,14 @@ namespace My_Face.Pages.Pocetna_stranica
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
 
-                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikStranica]->(b:Stranica) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "'  RETURN r",
+                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKSTRANICA]->(b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + "  RETURN r",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<KorisnikStranica> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikStranica>(q).ToList();
 
                     if (pom[0] == null)
                     {
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Stranica) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "' CREATE (a)-[r: StranicaKorisnik {Admin:false,Lajkovao:true,Pratilac:false}]->(b) RETURN r",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (a)-[r: KORISNIKSTRANICA {Admin:false,Lajkovao:true,Pratilac:false}]->(b) RETURN r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikStranica>(query);
@@ -129,7 +129,7 @@ namespace My_Face.Pages.Pocetna_stranica
                     }
                     else
                     {
-                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikStranica]->(b:Stranica) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + id + "'  set r.Lajkovao=true return r",
+                        var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKSTRANICA]->(b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + "  set r.Lajkovao=true return r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikStranica>(query);

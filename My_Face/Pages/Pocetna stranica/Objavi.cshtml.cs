@@ -78,14 +78,14 @@ namespace My_Face.Pages.Pocetna_stranica
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
                     string maxIdPom = getMaxId();
-                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:'" + maxIdPom + "', Tekst:'" + TekstObjave + "', Slika:'" + Slika.FileName + "', Datum: '" + DateTime.Now.ToString() + "'}) return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + maxIdPom + ", Tekst:" + TekstObjave + ", Slika:" + Slika.FileName + ", Datum: " + DateTime.Now.ToString() + "}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);
 
                     //Console.WriteLine(objava[0].Tekst);
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = '" + HttpContext.Session.GetString("idKorisnik") + "' AND b.ID = '" + maxIdPom + "' CREATE (a)-[r: KorisnikObjava {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN type(r)",
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + maxIdPom + " CREATE (a)-[r: KORISNIKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
@@ -105,7 +105,7 @@ namespace My_Face.Pages.Pocetna_stranica
         }
         private String getMaxId()
         {
-            var query = new Neo4jClient.Cypher.CypherQuery("where exists(n.id) return max(n.id)",
+            var query = new Neo4jClient.Cypher.CypherQuery("match (n) where exists(n.ID) return max(n.ID)",
                                                             new Dictionary<string, object>(), CypherResultMode.Set);
 
             String maxId = ((IRawGraphClient)client).ExecuteGetCypherResults<String>(query).ToList().FirstOrDefault();

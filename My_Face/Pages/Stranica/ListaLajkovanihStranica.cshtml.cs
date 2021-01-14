@@ -46,7 +46,7 @@ namespace My_Face.Pages.Stranica
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
                     Korisnik = pom[0];
 
-                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KorisnikStranica]->(b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and r.Lajkovao=true  RETURN b",
+                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKSTRANICA]->(b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and r.Lajkovao=true  RETURN b",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
 
                     zaPrikaz = ((IRawGraphClient)client).ExecuteGetCypherResults<My_Face.Model.Stranica>(q).ToList();

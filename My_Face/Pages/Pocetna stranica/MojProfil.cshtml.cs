@@ -93,7 +93,21 @@ namespace My_Face.Pages.Pocetna_stranica
         }
 
 
-
+        public async Task<IActionResult> OnPostKomentarisi(int id)
+        {
+            int idLog;
+            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+            if (log)
+            {
+                var query = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik), (b: Objava) WHERE a.ID = " + idLog + " AND b.ID = " + id + " CREATE(a) -[r:KOMENTAR{DatumPostavljanja:" + DateTime.Now.ToString("MM/dd/yyyy") + ", Tekst:'" + Komentar + "'}]->(b)", new Dictionary<string, object>(), CypherResultMode.Set);
+                ((IRawGraphClient)client).ExecuteCypher(query);
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("../Index");
+            }
+        }
 
 
 

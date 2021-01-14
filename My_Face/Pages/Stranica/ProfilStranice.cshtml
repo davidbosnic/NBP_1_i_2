@@ -64,9 +64,9 @@
         <div>@Model.zaPrikaz.DatumKreiranja</div>
         <div class="reaction">
 
-            <a class="btn text-green" asp-route-id="@@Model.zaPrikaz.ID" asp-page-handler="LajkujStranicu"><i class="icon ion-thumbsup"></i></a>
+            <button type="submit" class="btn text-green" asp-route-id="@@Model.zaPrikaz.ID" asp-page-handler="LajkujStranicu"><i class="icon ion-thumbsup"></i></button>
             @*<p>@item.Lajkova</p>*@
-            <a class="btn text-red" asp-route-id="@Model.zaPrikaz.ID" asp-page-handler="UnlajkujStranicu"><i class="fa fa-thumbs-down"></i></a>
+            <button type="submit" class="btn text-red" asp-route-id="@Model.zaPrikaz.ID" asp-page-handler="UnlajkujStranicu"><i class="fa fa-thumbs-down"></i></button>
             <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
             <input type="submit" asp-page-handler="Odprati" asp-route-id="@Model.zaPrikaz.ID" value="odprati" />
         </div>
@@ -74,7 +74,8 @@
     </div>
 </form>
 
-
+@if (Model.zaPrikaz != null)
+{
 @foreach (var item in Model.objaveZaPrikaz)
 {
     <form method="post">
@@ -95,10 +96,10 @@
                     </div>
                     <div class="reaction">
 
-                        <a class="btn text-green" asp-route-id="@item.ID" asp-page-handler="Lajkuj"><i class="icon ion-thumbsup"></i></a>
+                        <button type="submit" class="btn text-green" asp-route-id="@item.ID" asp-page-handler="Lajkuj"><i class="icon ion-thumbsup"></i></button>
                         <p>@item.Lajkova</p>
-                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Unlajkuj"><i class="fa fa-thumbs-down"></i></a>
-                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Podeli">Podeli</a>
+                        <button type="submit" class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Unlajkuj"><i class="fa fa-thumbs-down"></i></button>
+                        <button type="submit" class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Podeli">Podeli</button>
                     </div>
                     <div class="line-divider"></div>
                     <div class="post-text">
@@ -117,11 +118,12 @@
                     <div class="post-comment">
                         <img src="@Model.zaPrikaz.Slika" alt="" class="profile-photo-sm" />
                         <input type="text" asp-for="Komentar" class="form-control" placeholder="Post a comment">
-                        <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></a>
+                        <button type="submit" class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
                     </div>
                 </div>
             </div>
         </div>
 
     </form>
+}
 }

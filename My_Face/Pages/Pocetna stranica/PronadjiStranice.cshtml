@@ -1,0 +1,66 @@
+﻿@page
+@model My_Face.Pages.Pocetna_stranica.PronadjiStraniceModel
+@{
+    Layout = "_LayoutPocetna";
+}
+@section ProfilnaSlika{
+    <img src="@Model.Korisnik.Slika" alt="" class="img-responsive profile-photo" />
+}
+@section ProfilnaSlikaPozadina{
+    <style>
+        .timeline-cover {
+            background: url("@Model.Korisnik.SlikaPozadine") no-repeat;
+            background-position: center;
+            background-size: cover;
+            min-height: 360px;
+            border-radius: 0 0 4px 4px;
+            position: relative;
+        }
+    </style>
+}
+@section ImeIPrezime{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section ProfilnaSlika2{
+    @Model.Korisnik.Slika
+}
+@section ImeIPrezime2{
+    @Model.Korisnik.Ime @Model.Korisnik.Prezime
+}
+@section BrojPratilaca{
+
+}
+
+
+<div class="container">
+    <div class="post-content">
+        <form method="post">
+            <div class="post-text">
+                <p> String za pretragu : </p>
+            </div>
+            <input type="text" asp-for="SearchString" class="form-control" placeholder="">
+            <button type="submit" class="btn text-red" asp-page-handler="Pretrazi">Pretrazi</button>
+        </form>
+    </div>
+
+    <form method="post">
+        <div>
+            <div>@Model.ErrorMessage</div>
+            @if (Model.ListaStranica != null)
+            {
+                @foreach (var item in Model.ListaStranica)
+                {
+                    <!--Post Date-->
+                    <div class="post-date hidden-xs hidden-sm">
+                        <h5>@item.Slika</h5>
+                        <div>@item.Naziv</div>
+                    </div><!--Post Date End-->
+                    <div>
+                        <a class="btn text-red" asp-page="/Stranice/ProfilStranice" asp-route-id="@item.ID">Pogledaj stranicu</a>
+                        <button class="btn btn-primary" type="submit" asp-page-handler="Lajkuj" asp-route-id="@item.ID">Lajkuj stranicu</button>
+                    </div>
+                }
+            }
+        </div>
+    </form>
+</div>

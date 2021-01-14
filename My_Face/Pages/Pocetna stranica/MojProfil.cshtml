@@ -12,16 +12,19 @@
         <div>@Model.zaPrikaz.DatumRodjenja</div>
         <div>@Model.zaPrikaz.Adresa</div>
 
-        @foreach (var item in Model.objaveZaPrikaz)
+        @if(Model.objaveZaPrikaz != null)
         {
-            <div>@item.DatumObjave</div>
-            <div>@item.Tekst</div>
-            <div>@item.Slika</div>
-            <button asp-page-handler="Lajkuj" asp-route-id="@item.ID">Like</button>
-            <button asp-page-handler="Unlajkuj" asp-route-id="@item.ID">Unlike</button>
-            <button asp-page-handler="Podeli" asp-route-id="@item.ID">Podeli</button>
-            <label>Kommentarisi :</label>
-            <input type="text" />
+            @foreach (var item in Model.objaveZaPrikaz)
+            {
+                <div>@item.DatumObjave</div>
+                <div>@item.Tekst</div>
+                <div>@item.Slika</div>
+                <button asp-page-handler="Lajkuj" asp-route-id="@item.ID">Like</button>
+                <button asp-page-handler="Unlajkuj" asp-route-id="@item.ID">Unlike</button>
+                <button asp-page-handler="Podeli" asp-route-id="@item.ID">Podeli</button>
+                <label>Kommentarisi :</label>
+                <input type="text" />
+            }
         }
     </form>
 </div>

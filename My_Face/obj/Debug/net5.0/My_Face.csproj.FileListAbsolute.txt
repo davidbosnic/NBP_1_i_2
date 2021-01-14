@@ -175,3 +175,4 @@ E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutPrijatelj
 E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutPocetna.cshtml.g.cs
 E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Prijatelji\Chat.cshtml.g.cs
 E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Prijatelji\Obavestenja.cshtml.g.cs
+E:\gitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Pocetna stranica\PronadjiStranice.cshtml.g.cs

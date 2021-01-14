@@ -39,8 +39,9 @@ namespace My_Face.Pages.Prijatelji
                     Korisnik = korisnici[0];
                     idKorisnika = Korisnik.ID;
 
-                    var queryZaObjaveKorisnika1 = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + Korisnik.ID + " and r.Prijatelj=true and r.Blokiran=false return r {Korisnik1:n, Korisnik2:m}", new Dictionary<string, object>(), CypherResultMode.Set);
-                    Prijatelji = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(queryZaObjaveKorisnika1).ToList();
+                    var queryZaObjaveKorisnika1 = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + Korisnik.ID + " and r.Prijatelj=true and r.Blokiran=true return r {Korisnik1:n, Korisnik2:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                    var pomocno = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikKorisnik>(queryZaObjaveKorisnika1);
+                    Prijatelji = pomocno.ToList();
                 }
                 catch (Exception exc)
                 {
@@ -63,7 +64,7 @@ namespace My_Face.Pages.Prijatelji
                 IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
                 client = new BoltGraphClient(driver: driver);
                 client.Connect();
-                var query = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + idKorisnika + " and m.ID = " + id + " and r.Prijatelj=true set r.Blokiran='false' return r", new Dictionary<string, object>(), CypherResultMode.Set);
+                var query = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + idKorisnika + " and m.ID = " + id + " and r.Prijatelj=true set r.Blokiran=false return r", new Dictionary<string, object>(), CypherResultMode.Set);
                 ((IRawGraphClient)client).ExecuteCypher(query);
                 return RedirectToPage();
             }

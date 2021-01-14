@@ -37,13 +37,13 @@
                 {
                     <div class="col-md-6 col-sm-6">
                         <div class="friend-card">
-                            <img src="~/images/cover.jpeg" alt="profile-cover" class="img-responsive cover" />
+                            <img src=@item.Korisnik2.SlikaPozadine alt="profile-cover" class="img-responsive cover" />
                             <div class="card-info">
                                 <img src=@item.Korisnik2.Slika alt="user" class="profile-photo-lg" />
                                 <div class="friend-info">
                                     <a href="#" class="pull-right text-green">My Friend</a>
                                     <h5><a href="#" class="profile-link">@item.Korisnik2.Ime @item.Korisnik2.Prezime</a></h5>
-                                    <input class="btn btn-danger" asp-route-id="@item.Korisnik2.ID" asp-page-handler="Odblokiraj" type="submit" value="Blokiraj" />
+                                    <input class="btn btn-danger" asp-route-id="@item.Korisnik2.ID" asp-page-handler="Odblokiraj" type="submit" value="Odblokiraj" />
                                     <input class="btn btn-light" asp-route-id="@item.Korisnik2.ID" asp-page-handler="Izbaci" type="submit" value="Izbaci" />
                                 </div>
                             </div>

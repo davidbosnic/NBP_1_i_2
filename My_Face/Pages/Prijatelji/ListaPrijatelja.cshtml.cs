@@ -64,7 +64,7 @@ namespace My_Face.Pages.Prijatelji
                 IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
                 client = new BoltGraphClient(driver: driver);
                 client.Connect();
-                var query = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + idKorisnika + " and m.ID = " + id + " and r.Prijatelj=true set r.Blokiran='true' return r", new Dictionary<string, object>(), CypherResultMode.Set);
+                var query = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m) where n.ID = " + idKorisnika + " and m.ID = " + id + " and r.Prijatelj=true set r.Blokiran=true return r", new Dictionary<string, object>(), CypherResultMode.Set);
                 ((IRawGraphClient)client).ExecuteCypher(query);
                 return RedirectToPage();
             }

@@ -49,7 +49,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = new BoltGraphClient(driver: driver);
                     client.Connect();
-                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = '" + idLog + "'return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = " + idLog + " return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> k = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query).ToList();

@@ -9,8 +9,10 @@ namespace My_Face.Pages.Prijatelji
 {
     public class ObavestenjaModel : PageModel
     {
-        public void OnGet()
+
+        public async Task<IActionResult> OnGet()
         {
+
         }
     }
 }

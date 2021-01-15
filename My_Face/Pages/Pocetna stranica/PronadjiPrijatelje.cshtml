@@ -59,6 +59,7 @@
                     <div>
                         <a class="btn text-red" asp-page="/Prijatelji/ProfilPrijatelja" asp-route-id="@item.ID">Pogledaj profil</a>
                         <button class="btn btn-primary" type="submit" asp-page-handler="DodajPrijatelja" asp-route-id="@item.ID">Dodaj prijatelja</button>
+                        <button class="btn btn-primary" type="submit" asp-page-handler="OtvoriChat" asp-route-id="@item.ID">Chat</button>
                     </div>
                 }
             }

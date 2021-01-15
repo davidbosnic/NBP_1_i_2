@@ -98,6 +98,21 @@ namespace My_Face.Pages.Pocetna_stranica
             }
         }
 
+        public async Task<IActionResult> OnPostOtvoriChat(int id)
+        {
+            int idLog;
+            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+            if (log)
+            {
+                HttpContext.Session.SetString("Chatid", id.ToString());
+                return RedirectToPage("../Prijatelji/Chat");
+            }
+            else
+            {
+                return RedirectToPage("../Index");
+            }
+        }
+
         public async Task<IActionResult> OnPostDodajPrijatelja(int id)
         {
             int idLog;

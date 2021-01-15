@@ -18,6 +18,8 @@ namespace My_Face.Pages.Pocetna_stranica
         public Korisnik Korisnik { get; set; }
         public List<Objava> Objave { get; set; }
         public Dictionary<int, List<Komentar>> KomentariZaObjave;
+        public List<KorisnikObjava> ObjaveKorisnika { get; set; }
+        public List<StranicaObjava> ObjaveStranice { get; set; }
         [BindProperty(SupportsGet = true)]
         public String Komentarcic { get; set; }
 
@@ -44,20 +46,27 @@ namespace My_Face.Pages.Pocetna_stranica
                     List<Korisnik> korisnici = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(queryKorisnik).ToList();
                     Korisnik = korisnici[0];
 
-                    var queryZaObjaveKorisnika = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m)-[r1:KORISNIKOBJAVA]->(p) where n.ID = 1 and r.Prijatelj=true and r.Blokiran=false return p", new Dictionary<string, object>(), CypherResultMode.Set);
-                    List<Objava> Objave1 = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(queryZaObjaveKorisnika).ToList();
+                    var queryZaObjaveKorisnika = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m)-[r1:KORISNIKOBJAVA]->(p) where n.ID = " + idLog + " and r.Prijatelj=true and r.Blokiran=false return r1{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                    List<KorisnikObjava> Objave1 = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(queryZaObjaveKorisnika).ToList();
 
-                    var queryZaObjaveStranice = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKSTRANICA]->(m)-[r1:STRANICAOBJAVA]->(p) where n.ID = 1 and r.Prijatelj=true and r.Blokiran=false return p", new Dictionary<string, object>(), CypherResultMode.Set);
-                    List<Objava> Objave2 = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(queryZaObjaveStranice).ToList();
+                    var queryZaObjaveStranice = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKSTRANICA]->(m)-[r1:STRANICAOBJAVA]->(p) where n.ID = " + idLog + " and r.Prijatelj=true and r.Blokiran=false return r1{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                    List<StranicaObjava> Objave2 = ((IRawGraphClient)client).ExecuteGetCypherResults<StranicaObjava>(queryZaObjaveStranice).ToList();
 
-                    Objave = Objave1.Concat(Objave2).ToList();
+                    ObjaveStranice = Objave2;
+                    ObjaveKorisnika = Objave1;
                     KomentariZaObjave = new Dictionary<int, List<Komentar>>();
 
-                    foreach (var item in Objave)
+                    foreach (var item in Objave1)
                     {
-                        var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                        var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.Objava.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
                         List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
-                        KomentariZaObjave.Add(item.ID, pomKom);
+                        KomentariZaObjave.Add(item.Objava.ID, pomKom);
+                    }
+                    foreach (var item in Objave2)
+                    {
+                        var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.Objava.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                        List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
+                        KomentariZaObjave.Add(item.Objava.ID, pomKom);
                     }
                 }
                 catch (Exception exc)

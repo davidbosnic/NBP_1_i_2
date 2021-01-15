@@ -33,48 +33,97 @@
 
 @if (Model.Objave != null)
 {
-    @foreach (var item in Model.Objave)
+    @foreach (var item in Model.ObjaveKorisnika)
     {
         <form method="post">
             <div class="post-content">
 
                 <!--Post Date-->
                 <div class="post-date hidden-xs hidden-sm">
-                    <h5>@Model.Korisnik.Ime</h5>
-                    <p class="text-grey">@item.DatumObjave</p>
+                    <h5>@item.Korisnik.Ime</h5>
+                    <p class="text-grey">@item.Objava.DatumObjave</p>
                 </div><!--Post Date End-->
 
-                <img src="@item.Slika" alt="post-image" class="img-responsive post-image" />
+                <img src="@item.Objava.Slika" alt="post-image" class="img-responsive post-image" />
                 <div class="post-container">
-                    <img src="@Model.Korisnik.Slika" alt="user" class="profile-photo-md pull-left" />
+                    <img src="@item.Korisnik.Slika" alt="user" class="profile-photo-md pull-left" />
                     <div class="post-detail">
                         <div class="user-info">
-                            <h5><a href="timeline.html" class="profile-link">@Model.Korisnik.Ime @Model.Korisnik.Prezime</a> <span class="following">following</span></h5>
+                            <h5><a href="timeline.html" class="profile-link">@item.Korisnik.Ime @item.Korisnik.Prezime</a> <span class="following">following</span></h5>
                         </div>
                         <div class="reaction">
 
-                            <a class="btn text-green" asp-route-id="@item.ID" asp-page-handler="Lajk"><i class="icon ion-thumbsup"></i></a>
-                            <p>@item.Lajkova</p>
-                            <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Dislajk"><i class="fa fa-thumbs-down"></i></a>
+                            <button class="btn text-green" asp-route-id="@item.Objava.ID" asp-page-handler="Lajk"><i class="icon ion-thumbsup"></i></button>
+                            <p>@item.Objava.Lajkova</p>
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Dislajk"><i class="fa fa-thumbs-down"></i></button>
                         </div>
                         <div class="line-divider"></div>
                         <div class="post-text">
-                            <p> @item.Tekst </p>
+                            <p> @item.Objava.Tekst </p>
                         </div>
                         <div class="line-divider"></div>
 
-                        @foreach (var item2 in @Model.KomentariZaObjave.GetValueOrDefault(item.ID))
+                        @foreach (var item2 in @Model.KomentariZaObjave.GetValueOrDefault(item.Objava.ID))
                         {
                             <div class="post-comment">
                                 <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
-                                <p><a href="timeline.html" class="profile-link">@item2.Korisnik.Ime </a> @item2.Tekst</p>
+                                <p><button href="#" class="profile-link">@item2.Korisnik.Ime </button> @item2.Tekst</p>
                             </div>
                         }
 
                         <div class="post-comment">
                             <img src="@Model.Korisnik.Slika" alt="" class="profile-photo-sm" />
                             <input type="text" asp-for="Komentarcic" class="form-control" placeholder="Post a comment">
-                            <a class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></a>
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    }
+    @foreach (var item in Model.ObjaveStranice)
+    {
+        <form method="post">
+            <div class="post-content">
+
+                <!--Post Date-->
+                <div class="post-date hidden-xs hidden-sm">
+                    <h5>@item.Stranica.Naziv</h5>
+                    <p class="text-grey">@item.Objava.DatumObjave</p>
+                </div><!--Post Date End-->
+
+                <img src="@item.Objava.Slika" alt="post-image" class="img-responsive post-image" />
+                <div class="post-container">
+                    <img src="@item.Stranica.Slika" alt="user" class="profile-photo-md pull-left" />
+                    <div class="post-detail">
+                        <div class="user-info">
+                            <h5><a href="timeline.html" class="profile-link">@item.Stranica.Naziv</a> <span class="following">following</span></h5>
+                        </div>
+                        <div class="reaction">
+
+                            <button class="btn text-green" asp-route-id="@item.Objava.ID" asp-page-handler="Lajk"><i class="icon ion-thumbsup"></i></button>
+                            <p>@item.Objava.Lajkova</p>
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Dislajk"><i class="fa fa-thumbs-down"></i></button>
+                        </div>
+                        <div class="line-divider"></div>
+                        <div class="post-text">
+                            <p> @item.Objava.Tekst </p>
+                        </div>
+                        <div class="line-divider"></div>
+
+                        @foreach (var item2 in @Model.KomentariZaObjave.GetValueOrDefault(item.Objava.ID))
+                        {
+                            <div class="post-comment">
+                                <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
+                                <p><button href="#" class="profile-link">@item2.Korisnik.Ime </button> @item2.Tekst</p>
+                            </div>
+                        }
+
+                        <div class="post-comment">
+                            <img src="@Model.Korisnik.Slika" alt="" class="profile-photo-sm" />
+                            <input type="text" asp-for="Komentarcic" class="form-control" placeholder="Post a comment">
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
                         </div>
                     </div>
                 </div>

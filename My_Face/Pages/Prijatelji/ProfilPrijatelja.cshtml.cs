@@ -52,12 +52,10 @@ namespace My_Face.Pages.Prijatelji
                 if (id != null)
                 {
                     idKorisnika = id;
-                    IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                     try
                     {
-                        client = new BoltGraphClient(driver: driver);
-                        client.Connect();
+                        client = DataLayer.Neo4jManager.GetClient();
                         var query = new Neo4jClient.Cypher.CypherQuery("MATCH (n:Korisnik) WHERE n.ID = " + id + " return n",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
 
@@ -113,12 +111,10 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + "  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -169,6 +165,7 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
+                client = DataLayer.Neo4jManager.GetClient();
                 var query = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik), (b: Objava) WHERE a.ID = " + idLog + " AND b.ID = " + id + " CREATE(a) -[r:KOMENTAR{DatumPostavljanja:" + DateTime.Now.ToString("MM/dd/yyyy") + ", Tekst:'" + Komentar + "'}]->(b)", new Dictionary<string, object>(), CypherResultMode.Set);
                 ((IRawGraphClient)client).ExecuteCypher(query);
                 return Page();
@@ -186,14 +183,12 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
-                    
+
                     var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + "  DELETE r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
 
@@ -218,13 +213,11 @@ namespace My_Face.Pages.Prijatelji
             int idLog;
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
-            {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+            { 
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]->(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -275,12 +268,10 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]->(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -319,13 +310,11 @@ namespace My_Face.Pages.Prijatelji
             int idLog;
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
-            {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+            { 
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]->(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -369,12 +358,11 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+                
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -411,12 +399,11 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+                
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -454,12 +441,11 @@ namespace My_Face.Pages.Prijatelji
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
+                
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Objava) WHERE a.ID = " + id + " return a",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -493,6 +479,7 @@ namespace My_Face.Pages.Prijatelji
 
         private String getMaxId()
         {
+            client = DataLayer.Neo4jManager.GetClient();
             var query = new Neo4jClient.Cypher.CypherQuery("match (n) where exists(n.ID) return max(n.ID)",
                                                             new Dictionary<string, object>(), CypherResultMode.Set);
 

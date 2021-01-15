@@ -37,12 +37,10 @@ namespace My_Face.Pages.Pocetna_stranica
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     //Console.WriteLine(objava[0].Tekst);
 
@@ -71,12 +69,10 @@ namespace My_Face.Pages.Pocetna_stranica
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
                     string maxIdPom = getMaxId();
                     var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + maxIdPom + ", Tekst:" + TekstObjave + ", Slika:" + Slika.FileName + ", Datum: " + DateTime.Now.ToString() + "}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -105,6 +101,8 @@ namespace My_Face.Pages.Pocetna_stranica
         }
         private String getMaxId()
         {
+
+            client = DataLayer.Neo4jManager.GetClient();
             var query = new Neo4jClient.Cypher.CypherQuery("match (n) where exists(n.ID) return max(n.ID)",
                                                             new Dictionary<string, object>(), CypherResultMode.Set);
 

@@ -33,12 +33,10 @@ namespace My_Face.Pages.Stranica
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + "  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);

@@ -19,11 +19,15 @@ namespace My_Face.Pages
         public String name { get; set; }
         public String password { get; set; }
 
+
     }
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private BoltGraphClient client;
+
+        [BindProperty]
+        public String message { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
         {
@@ -52,6 +56,12 @@ namespace My_Face.Pages
             {
                 Console.WriteLine("greska");
             }
+        }
+
+        public async Task<IActionResult> OnPostPosaljiPoruku()
+        {
+            DataLayer.DataProvider.AddPoruka("1", "2", "123123", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), message);
+            return RedirectToPage();
         }
     }
 }

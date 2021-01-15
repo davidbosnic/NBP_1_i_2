@@ -45,12 +45,9 @@ namespace My_Face.Pages.Pocetna_stranica
             if (log)
             {
 
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
-
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client= DataLayer.Neo4jManager.GetClient();
 
                     var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + "  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -107,12 +104,10 @@ namespace My_Face.Pages.Pocetna_stranica
             bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
             if (log)
             {
-                IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
 
                 try
                 {
-                    client = new BoltGraphClient(driver: driver);
-                    client.Connect();
+                    client = DataLayer.Neo4jManager.GetClient();
 
                     var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = '" + id + "'  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
@@ -176,6 +171,8 @@ namespace My_Face.Pages.Pocetna_stranica
 
         private String getMaxId()
         {
+            client = DataLayer.Neo4jManager.GetClient();
+
             var query = new Neo4jClient.Cypher.CypherQuery("match (n) where exists(n.ID) return max(n.ID)",
                                                             new Dictionary<string, object>(), CypherResultMode.Set);
 

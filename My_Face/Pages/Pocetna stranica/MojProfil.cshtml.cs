@@ -220,6 +220,16 @@ namespace My_Face.Pages.Pocetna_stranica
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query3);
 
+                    var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik) -[r: KORISNIKKORISNIK] -> (b: Korisnik) WHERE b.ID = " + HttpContext.Session.GetString("idKorisnik")+ " AND r.Pratilac=true return a.ID",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                    List<string> listaPratilaca = ((IRawGraphClient)client).ExecuteGetCypherResults<string>(query4).ToList();
+                    if (listaPratilaca!=null)
+                    {
+                        foreach (var item in listaPratilaca)
+                        {
+                            DataLayer.DataProvider.AddNotifikacija(idLog.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        }
+                    }
 
                 }
                 catch (Exception exc)

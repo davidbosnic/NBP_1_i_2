@@ -34,13 +34,13 @@ namespace DataLayer
 
         }
 
-        public static List<Notifikacija> GetNotifikacija(string publisherid, string subscriberid)
+        public static List<Notifikacija> GetNotifikacija( string subscriberid)
         {
             ISession session = SessionManager.GetSession();
             if (session == null)
                 return null;
 
-            var messages = session.Execute("select * from \"Notifikacija\" where publisherid=" + publisherid + " and subscriberid=" + subscriberid);
+            var messages = session.Execute("select * from \"Notifikacija\" where subscriberid=" + subscriberid);
 
             List<Notifikacija> notifikacije = new List<Notifikacija>();
 

@@ -275,3 +275,10 @@ C:\Users\Begota\Documents\GitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\
 C:\Users\Begota\Documents\GitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Shared\_LayoutStranica.cshtml.g.cs
 C:\Users\Begota\Documents\GitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Stranica\ListaLajkovanihStranica.cshtml.g.cs
 C:\Users\Begota\Documents\GitHub\NBP_1_i_2\My_Face\obj\Debug\net5.0\Razor\Pages\Stranica\ProfilStranice.cshtml.g.cs
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\Cassandra.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\K4os.Compression.LZ4.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\System.CodeDom.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\System.Management.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\DataLayer.dll
+E:\gitHub\NBP_1_i_2\My_Face\bin\Debug\net5.0\DataLayer.pdb

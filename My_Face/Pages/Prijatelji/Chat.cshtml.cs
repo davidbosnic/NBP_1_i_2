@@ -25,6 +25,10 @@ namespace My_Face.Pages.Prijatelji
 
         [BindProperty]
 
+        public Korisnik Prijatelj { get; set; }
+
+        [BindProperty]
+
         public List<Poruka> poruke { get; set; }
 
         [BindProperty]
@@ -51,6 +55,13 @@ namespace My_Face.Pages.Prijatelji
 
                     int idchat;
                     int.TryParse(HttpContext.Session.GetString("Chatid"), out idchat);
+
+                    var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("Chatid") + "  RETURN a",
+                                               new Dictionary<string, object>(), CypherResultMode.Set);
+
+                    List<Korisnik> pom2 = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query3).ToList();
+                    Prijatelj = pom2[0];
+
 
 
 

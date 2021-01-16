@@ -13,7 +13,7 @@ namespace DataLayer
             if (session == null)
                 return null;
 
-            var messages = session.Execute("select * from \"Poruka\" where senderid="+senderid+" and receiverid="+receiverid);
+            var messages = session.Execute("select * from \"Poruka\" where senderid='"+senderid+"' and receiverid='"+receiverid+"'");
 
             List<Poruka> poruke = new List<Poruka>();
 
@@ -40,7 +40,7 @@ namespace DataLayer
             if (session == null)
                 return null;
 
-            var messages = session.Execute("select * from \"Notifikacija\" where subscriberid=" + subscriberid);
+            var messages = session.Execute("select * from \"Notifikacija\" where subscriberid='" + subscriberid+"'");
 
             List<Notifikacija> notifikacije = new List<Notifikacija>();
 

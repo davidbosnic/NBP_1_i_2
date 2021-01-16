@@ -26,6 +26,10 @@ namespace My_Face.Pages.Prijatelji
 
         public List<Notifikacija> notifikacije { get; set; }
 
+        [BindProperty]
+
+        public List<String> imena { get; set; }
+
 
         public async Task<IActionResult> OnGet()
         {
@@ -49,7 +53,15 @@ namespace My_Face.Pages.Prijatelji
                     notifikacije = DataLayer.DataProvider.GetNotifikacija(idLog.ToString());
                     notifikacije = notifikacije.OrderByDescending(o => o.senttime).ToList();
 
+                    foreach (var item in notifikacije)
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + item.publisherid + "  RETURN a",
+                                               new Dictionary<string, object>(), CypherResultMode.Set);
 
+                        List<Korisnik> pom2 = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query3).ToList();
+                        imena.Add(pom2[0].Ime+" "+pom2[0].Prezime);
+                    }
+                    
                 }
                 catch (Exception exc)
                 {
@@ -61,6 +73,11 @@ namespace My_Face.Pages.Prijatelji
             {
                 return RedirectToPage("../Index");
             }
+        }
+        public async Task<IActionResult> OnPostObrisiAsync(string id)
+        {
+            DataLayer.DataProvider.DeleteNotifikacija(id);
+            return RedirectToPage();
         }
     }
 }

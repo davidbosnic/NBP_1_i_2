@@ -84,7 +84,16 @@ namespace DataLayer
 
         }
 
+        public static void DeleteNotifikacija(string id)
+        {
+            ISession session = SessionManager.GetSession();
 
+            if (session == null)
+                return;
+
+            RowSet hotelData = session.Execute("delete from \"Notifikacija\" where \"id\" = '" + id + "'");
+
+        }
 
 
 

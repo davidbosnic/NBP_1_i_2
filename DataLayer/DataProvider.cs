@@ -2,6 +2,7 @@
 using DataLayer.QueryEntities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataLayer
 {
@@ -69,8 +70,9 @@ namespace DataLayer
             if (session == null)
                 return;
 
-            RowSet messageData = session.Execute("insert into \"Poruka\" (senderid, receiverid, id, senttime, message)  values ('" + senderid + "', '"+receiverid+"', '"+id+"', '"+senttime+"','"+message+"')");
+            RowSet messageData = session.Execute("insert into \"Poruka\" (senderid, receiverid, id, senttime, message)  values ('" + senderid + "', '"+receiverid+"', '"+ GetCounter("poruka_id") + "', '"+senttime+"','"+message+"')");
 
+            UpdateCounter("poruka_id");
         }
 
         public static void AddNotifikacija(string publisherid, string subscriberid, string id, string senttime)
@@ -80,8 +82,9 @@ namespace DataLayer
             if (session == null)
                 return;
 
-            RowSet notificationData = session.Execute("insert into \"Notifikacija\" (publisherid, subscriber, id, senttime)  values ('" + publisherid + "', '" + subscriberid + "', '" + id + "', '" + senttime + "')");
+            RowSet notificationData = session.Execute("insert into \"Notifikacija\" (publisherid, subscriber, id, senttime)  values ('" + publisherid + "', '" + subscriberid + "', '" + GetCounter("notifikacija_id") + "', '" + senttime + "')");
 
+            UpdateCounter("notifikacija_id");
         }
 
         public static void DeleteNotifikacija(string id)
@@ -96,9 +99,30 @@ namespace DataLayer
         }
 
 
+        public static string GetCounter(string x)
+        {
+            ISession session = SessionManager.GetSession();
+            if (session == null)
+                return null;
 
+            Row counter = session.Execute("select * from \"ids\" where id_name = '" + x + "'").FirstOrDefault();
 
+            return counter["next_id"].ToString();
+        }
 
+        public static void UpdateCounter(string x)
+        {
+            ISession session = SessionManager.GetSession();
+            if (session == null)
+                return;
+            Row counter = session.Execute("select * from \"ids\" where id_name = '" + x + "'").FirstOrDefault();
+            if(counter!=null)
+            {
+                var br = Convert.ToInt32(counter["next_id"].ToString());
+                br++;
+                var counterupdate = session.Execute("update \"ids\" set next_id = " + br+" where id_name = '" + x + "';");
+            }
+        }
 
 
 

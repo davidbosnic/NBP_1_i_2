@@ -82,19 +82,19 @@ namespace DataLayer
             if (session == null)
                 return;
 
-            RowSet notificationData = session.Execute("insert into \"Notifikacija\" (publisherid, subscriber, id, senttime)  values ('" + publisherid + "', '" + subscriberid + "', '" + GetCounter("notifikacija_id") + "', '" + senttime + "')");
+            RowSet notificationData = session.Execute("insert into \"Notifikacija\" (publisherid, subscriberid, id, senttime)  values ('" + publisherid + "', '" + subscriberid + "', '" + GetCounter("notifikacija_id") + "', '" + senttime + "')");
 
             UpdateCounter("notifikacija_id");
         }
 
-        public static void DeleteNotifikacija(string id)
+        public static void DeleteNotifikacija(string id, string sid)
         {
             ISession session = SessionManager.GetSession();
 
             if (session == null)
                 return;
 
-            RowSet hotelData = session.Execute("delete from \"Notifikacija\" where \"id\" = '" + id + "'");
+            RowSet hotelData = session.Execute("delete from \"Notifikacija\" where \"subscriberid\" = '"+sid+"' and \"id\" = '" + id + "'");
 
         }
 

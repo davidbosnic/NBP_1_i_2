@@ -124,13 +124,13 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = DataLayer.Neo4jManager.GetClient();
 
-                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = '" + id + "'  RETURN a",
+                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKKORISNIK]-(b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + "  RETURN a",
                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
 
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(q).ToList();
 
                     //da li sam u pravu da mora da ima po dve veze za svako prijateljstvo ?
-                    if (pom[0] == null)
+                    if (pom != null && pom.Count==0)
                     {
                         var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Korisnik) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (a)-[r: KORISNIKKORISNIK {Prijatelj:true,Pratilac:false,Blokiran:false}]->(b) RETURN r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
@@ -159,7 +159,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {

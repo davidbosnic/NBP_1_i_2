@@ -47,7 +47,7 @@ namespace My_Face.Pages
 
         public async Task<IActionResult> OnPostLog()
         {
-            HttpContext.Session.SetString("idKorisnik", "1");
+            HttpContext.Session.SetString("idKorisnik", "6");
             return RedirectToPage("./Pocetna stranica/VremenskaLinija");
         }
     }

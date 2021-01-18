@@ -78,7 +78,7 @@ namespace My_Face.Pages.Prijatelji
 
                         foreach (var item in objaveZaPrikaz)
                         {
-                            var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where n.ID = " + item.ID + " return r{Korisnik:n,Objava:m}", new Dictionary<string, object>(), CypherResultMode.Set);
+                            var queryZaObjave = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KOMENTAR]->(m) where m.ID = " + item.ID + " return r{Korisnik:n,Objava:m,Tekst:r.Tekst,DatumPostavljanja:r.DatumPostavljanja}", new Dictionary<string, object>(), CypherResultMode.Set);
                             List<Komentar> pomKom = ((IRawGraphClient)client).ExecuteGetCypherResults<Komentar>(queryZaObjave).ToList();
                             KomentariZaObjave.Add(item.ID, pomKom);
                         }
@@ -151,7 +151,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {
@@ -168,7 +168,91 @@ namespace My_Face.Pages.Prijatelji
                 client = DataLayer.Neo4jManager.GetClient();
                 var query = new Neo4jClient.Cypher.CypherQuery("MATCH(a: Korisnik), (b: Objava) WHERE a.ID = " + idLog + " AND b.ID = " + id + " CREATE(a) -[r:KOMENTAR{DatumPostavljanja:" + DateTime.Now.ToString("MM/dd/yyyy") + ", Tekst:'" + Komentar + "'}]->(b)", new Dictionary<string, object>(), CypherResultMode.Set);
                 ((IRawGraphClient)client).ExecuteCypher(query);
-                return Page();
+                return RedirectToPage();
+            }
+            else
+            {
+                return RedirectToPage("../Index");
+            }
+        }
+
+
+
+
+
+
+        public async Task<IActionResult> OnPostLajkuj(int? id)
+        {
+            int idLog;
+            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+            if (log)
+            {
+
+                try
+                {
+                    client = DataLayer.Neo4jManager.GetClient();
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                    List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
+
+                    if (o[0] != null)
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=true set b.Lajkova = " + (o[0].Lajkova + 1),
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
+                    }
+                    else
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:true,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN b",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("greska");
+                }
+                return RedirectToPage();
+            }
+            else
+            {
+                return RedirectToPage("../Index");
+            }
+        }
+
+        public async Task<IActionResult> OnPostUnlajkuj(int? id)
+        {
+            int idLog;
+            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+            if (log)
+            {
+
+                try
+                {
+                    client = DataLayer.Neo4jManager.GetClient();
+
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                    List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
+
+                    if (o[0] != null)
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=false set b.Lajkova = " + (o[0].Lajkova - 1),
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
+                    }
+                    else
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:false,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN b",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("greska");
+                }
+                return RedirectToPage();
             }
             else
             {
@@ -200,7 +284,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {
@@ -254,7 +338,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {
@@ -297,7 +381,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {
@@ -344,7 +428,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {
@@ -352,87 +436,87 @@ namespace My_Face.Pages.Prijatelji
             }
         }
 
-        public async Task<IActionResult> OnPostLajkuj(int? id)
-        {
-            int idLog;
-            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
-            if (log)
-            {
+        //public async Task<IActionResult> OnPostLajkuj(int? id)
+        //{
+        //    int idLog;
+        //    bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+        //    if (log)
+        //    {
                 
 
-                try
-                {
-                    client = DataLayer.Neo4jManager.GetClient();
+        //        try
+        //        {
+        //            client = DataLayer.Neo4jManager.GetClient();
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                    List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
+        //            var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //            List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 
-                    if (o[0] != null)
-                    {
-                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=true",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3).ToList();
-                    }
-                    else
-                    {
-                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:true,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN r",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query3).ToList();
-                    }
-                }
-                catch (Exception exc)
-                {
-                    Console.WriteLine("greska");
-                }
-                return Page();
-            }
-            else
-            {
-                return RedirectToPage("../Index");
-            }
-        }
+        //            if (o[0] != null)
+        //            {
+        //                var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=true",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //                ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3).ToList();
+        //            }
+        //            else
+        //            {
+        //                var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:true,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN r",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //                ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query3).ToList();
+        //            }
+        //        }
+        //        catch (Exception exc)
+        //        {
+        //            Console.WriteLine("greska");
+        //        }
+        //        return RedirectToPage();
+        //    }
+        //    else
+        //    {
+        //        return RedirectToPage("../Index");
+        //    }
+        //}
 
-        public async Task<IActionResult> OnPostUnlajkuj(int? id)
-        {
-            int idLog;
-            bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
-            if (log)
-            {
+        //public async Task<IActionResult> OnPostUnlajkuj(int? id)
+        //{
+        //    int idLog;
+        //    bool log = int.TryParse(HttpContext.Session.GetString("idKorisnik"), out idLog);
+        //    if (log)
+        //    {
                 
 
-                try
-                {
-                    client = DataLayer.Neo4jManager.GetClient();
+        //        try
+        //        {
+        //            client = DataLayer.Neo4jManager.GetClient();
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                    List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
+        //            var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " return b",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //            List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 
-                    if (o[0] != null)
-                    {
-                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=false",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                        ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3).ToList();
-                    }
-                    else
-                    {
-                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:false,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN r",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query3).ToList();
-                    }
-                }
-                catch (Exception exc)
-                {
-                    Console.WriteLine("greska");
-                }
-                return Page();
-            }
-            else
-            {
-                return RedirectToPage("../Index");
-            }
-        }
+        //            if (o[0] != null)
+        //            {
+        //                var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=false",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //                ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3).ToList();
+        //            }
+        //            else
+        //            {
+        //                var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:false,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN r",
+        //                                                           new Dictionary<string, object>(), CypherResultMode.Set);
+        //                ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query3).ToList();
+        //            }
+        //        }
+        //        catch (Exception exc)
+        //        {
+        //            Console.WriteLine("greska");
+        //        }
+        //        return RedirectToPage();
+        //    }
+        //    else
+        //    {
+        //        return RedirectToPage("../Index");
+        //    }
+        //}
 
 
         public async Task<IActionResult> OnPostPodeli(int? id)
@@ -480,7 +564,7 @@ namespace My_Face.Pages.Prijatelji
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+return RedirectToPage();
             }
             else
             {

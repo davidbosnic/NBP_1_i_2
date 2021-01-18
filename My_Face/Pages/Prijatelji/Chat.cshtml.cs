@@ -66,7 +66,8 @@ namespace My_Face.Pages.Prijatelji
 
 
                     poruke = DataLayer.DataProvider.GetPoruka(idLog.ToString(), idchat.ToString());
-                    poruke.Concat(DataLayer.DataProvider.GetPoruka(idchat.ToString(), idLog.ToString()));
+                    var poruke2 = DataLayer.DataProvider.GetPoruka(idchat.ToString(), idLog.ToString());
+                    poruke.AddRange(poruke2);
                     poruke = poruke.OrderBy(o => o.senttime).ToList();
 
 

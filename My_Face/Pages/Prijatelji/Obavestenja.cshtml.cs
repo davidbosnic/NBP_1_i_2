@@ -52,7 +52,7 @@ namespace My_Face.Pages.Prijatelji
 
                     notifikacije = DataLayer.DataProvider.GetNotifikacija(idLog.ToString());
                     notifikacije = notifikacije.OrderByDescending(o => o.senttime).ToList();
-
+                    imena = new List<string>();
                     foreach (var item in notifikacije)
                     {
                         var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik) WHERE a.ID = " + item.publisherid + "  RETURN a",
@@ -76,7 +76,7 @@ namespace My_Face.Pages.Prijatelji
         }
         public async Task<IActionResult> OnPostObrisiAsync(string id)
         {
-            DataLayer.DataProvider.DeleteNotifikacija(id);
+            DataLayer.DataProvider.DeleteNotifikacija(id,HttpContext.Session.GetString("idKorisnik"));
             return RedirectToPage();
         }
     }

@@ -132,19 +132,19 @@ namespace My_Face.Pages.Pocetna_stranica
                     }
                     else
                     {
-                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Stranica), (b:Objava) WHERE a.ID = " + odabranaStavka + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: STRANICAKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Stranica), (b:Objava) WHERE a.ID = " + odabranaStavka + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: STRANICAOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
 
                         ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
 
-                        var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKKORISNIK]->(b:Stranica) WHERE b.ID = " + odabranaStavka + " AND r.Pratilac=true return a.ID",
+                        var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKSTRANICA]->(b:Stranica) WHERE b.ID = " + odabranaStavka + " AND r.Pratilac=true return a.ID",
                                                                        new Dictionary<string, object>(), CypherResultMode.Set);
                         List<string> listaPratilaca = ((IRawGraphClient)client).ExecuteGetCypherResults<string>(query4).ToList();
                         if (listaPratilaca != null)
                         {
                             foreach (var item in listaPratilaca)
                             {
-                                DataLayer.DataProvider.AddNotifikacija(idLog.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                DataLayer.DataProvider.AddNotifikacija(odabranaStavka.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                             }
                         }
                     }

@@ -49,7 +49,6 @@ namespace My_Face.Pages.Prijatelji
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
                     Korisnik = pom[0];
 
-
                     notifikacije = DataLayer.DataProvider.GetNotifikacija(idLog.ToString());
                     notifikacije = notifikacije.OrderByDescending(o => o.senttime).ToList();
                     imena = new List<string>();
@@ -59,9 +58,23 @@ namespace My_Face.Pages.Prijatelji
                                                new Dictionary<string, object>(), CypherResultMode.Set);
 
                         List<Korisnik> pom2 = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query3).ToList();
-                        imena.Add(pom2[0].Ime+" "+pom2[0].Prezime);
+                        if (pom2 != null && pom2.Count != 0)
+                            imena.Add(pom2[0].Ime + " " + pom2[0].Prezime);
+                        else
+                            imena.Add("");
                     }
-                    
+                    int br = 0;
+                    foreach (var item in notifikacije)
+                    {
+                        var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Stranica) WHERE a.ID = " + item.publisherid + "  RETURN a",
+                                               new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        List<My_Face.Model.Stranica> pom2 = ((IRawGraphClient)client).ExecuteGetCypherResults<My_Face.Model.Stranica>(query3).ToList();
+                        if(pom2!=null && pom2.Count!=0)
+                            imena[br]=pom2[0].Naziv;
+                        br++;
+                    }
+
                 }
                 catch (Exception exc)
                 {

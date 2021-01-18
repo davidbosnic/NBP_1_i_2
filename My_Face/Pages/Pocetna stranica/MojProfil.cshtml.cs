@@ -210,10 +210,10 @@ namespace My_Face.Pages.Pocetna_stranica
 
 
                     string maxIdPom = getMaxId();
-                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + maxIdPom + ", Tekst:" + o[0].Tekst + ", Slika:" + o[0].Slika + ", Datum: " + DateTime.Now.ToString() + "}) return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + (Convert.ToInt32(maxIdPom) + 1) + ", Tekst:" + o[0].Tekst + ", Slika:" + o[0].Slika + ", Datum: " + DateTime.Now.ToString() + "}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
-                    ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);
+                    var n = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query).ToList();
 
                     var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik),(b:Objava),(c:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + maxIdPom + " and c.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA{MojaObjava: true, PodeljenaObjava: true, Lajkovao: false}]->(b)-[g: OBJAVAOBJAVA]->(c) return a",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -236,7 +236,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {

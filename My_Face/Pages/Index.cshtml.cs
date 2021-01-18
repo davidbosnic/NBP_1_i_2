@@ -36,32 +36,19 @@ namespace My_Face.Pages
 
         public async Task OnGetAsync()
         {
-            IDriver driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "1234"), Config.Builder.WithEncryptionLevel(EncryptionLevel.None).ToConfig());
-
-            HttpContext.Session.SetString("idKorisnik","1");
-            try
-            {
-
-            client = new BoltGraphClient(driver: driver);
-            
-                client.Connect();
-            var query = new Neo4jClient.Cypher.CypherQuery("MATCH (tom {name: \"Tom Hanks\"}) RETURN tom",
-                                                           new Dictionary<string, object>(), CypherResultMode.Set);
-
-            List<User> users = ((IRawGraphClient)client).ExecuteGetCypherResults<User>(query).ToList();
-            Console.WriteLine(users[0].name);
-
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("greska");
-            }
+           
         }
 
         public async Task<IActionResult> OnPostPosaljiPoruku()
         {
             DataLayer.DataProvider.AddPoruka("1", "2", "123123", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), message);
             return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostLog()
+        {
+            HttpContext.Session.SetString("idKorisnik", "1");
+            return RedirectToPage("./Pocetna stranica/VremenskaLinija");
         }
     }
 }

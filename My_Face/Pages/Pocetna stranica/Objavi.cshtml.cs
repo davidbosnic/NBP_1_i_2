@@ -18,7 +18,7 @@ namespace My_Face.Pages.Pocetna_stranica
         public string TekstObjave { get; set; }
 
         [BindProperty]
-        public IFormFile Slika { get; set; }
+        public string Slika { get; set; }
 
         [BindProperty] 
         
@@ -74,14 +74,14 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = DataLayer.Neo4jManager.GetClient();
                     string maxIdPom = getMaxId();
-                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + maxIdPom + ", Tekst:'" + TekstObjave + "', Slika:'" + ((Slika==null)?"": Slika.FileName) +"', Datum: '" + DateTime.Now.ToString() + "'}) return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + (Convert.ToInt32(maxIdPom) + 1) + ", Tekst:'" + TekstObjave + "', Slika:'" + ((Slika==null)?"": Slika) + "', DatumObjave: '" + DateTime.Now.ToString() + "'}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);
 
                     //Console.WriteLine(objava[0].Tekst);
 
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + maxIdPom + " CREATE (a)-[r: KORISNIKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
+                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: KORISNIKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);

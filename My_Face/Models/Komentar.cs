@@ -9,7 +9,7 @@ namespace My_Face.Model
     {
         public Korisnik Korisnik { get; set; }
         public Objava Objava { get; set; }
-        public DateTime DatumPostavljanja { get; set; }
+        public string DatumPostavljanja { get; set; }
         public String Tekst { get; set; }
     }
 
@@ -17,7 +17,7 @@ namespace My_Face.Model
     {
         public Stranica Stranica { get; set; }
         public Objava Objava { get; set; }
-        public DateTime DatumPostavljanja { get; set; }
+        public string DatumPostavljanja { get; set; }
         public String Tekst { get; set; }
     }
 }

@@ -11,6 +11,6 @@ namespace My_Face.Model
         public String Tekst { get; set; }
         public String Slika { get; set; }
         public int Lajkova { get; set; }
-        public DateTime DatumObjave { get; set; }
+        public string DatumObjave { get; set; }
     }
 }

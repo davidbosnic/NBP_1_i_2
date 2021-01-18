@@ -34,7 +34,10 @@
     <form method="post" enctype="multipart/form-data">
         <div class="post-comment">
             <input type="text" asp-for="TekstObjave" class="form-control" placeholder="Napisite tekst objave">
-            <input type="file" asp-for="Slika" />
+            <div class="form-group">
+                <label for="inputAddress">URL slike</label>
+                <input type="text" class="form-control" id="inputAddress" asp-for="Slika" placeholder="URL slike">
+            </div>
             <button class="btn text-red" type="submit" asp-page-handler="Objavi">Objavi</button>
         </div>
     </form>

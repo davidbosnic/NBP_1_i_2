@@ -9,7 +9,7 @@ namespace My_Face.Model
     {
         public int ID { get; set; }
         public String Naziv { get; set; }
-        public DateTime DatumKreiranja { get; set; }
+        public string DatumKreiranja { get; set; }
         public String Slika { get; set; }
         public String SlikaPozadina { get; set; }
     }

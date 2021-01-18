@@ -12,7 +12,7 @@ namespace My_Face.Model
         public String Prezime { get; set; }
         public String Email { get; set; }
         public String Sifra { get; set; }
-        public DateTime DatumRodjenja { get; set; }
+        public string DatumRodjenja { get; set; }
         public String Adresa { get; set; }
         public String Slika { get; set; }
         public String SlikaPozadine { get; set; }

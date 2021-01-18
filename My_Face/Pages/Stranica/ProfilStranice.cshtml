@@ -69,6 +69,8 @@
             <button type="submit" class="btn text-red" asp-route-id="@Model.zaPrikaz.ID" asp-page-handler="UnlajkujStranicu"><i class="fa fa-thumbs-down"></i></button>
             <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
             <input type="submit" asp-page-handler="Odprati" asp-route-id="@Model.zaPrikaz.ID" value="odprati" />
+            <input type="submit" asp-page-handler="PostaniAdmin" asp-route-id="@Model.zaPrikaz.ID" value="Postani admin" />
+            <input type="submit" asp-page-handler="UkloniAdmina" asp-route-id="@Model.zaPrikaz.ID" value="Ukloni admina" />
         </div>
 
     </div>

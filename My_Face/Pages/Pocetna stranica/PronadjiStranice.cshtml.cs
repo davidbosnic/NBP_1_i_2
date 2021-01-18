@@ -114,7 +114,7 @@ namespace My_Face.Pages.Pocetna_stranica
 
                     List<KorisnikStranica> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikStranica>(q).ToList();
 
-                    if (pom[0] == null)
+                    if (pom != null && pom.Count == 0)
                     {
                         var query = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + id + " CREATE (a)-[r: KORISNIKSTRANICA {Admin:false,Lajkovao:true,Pratilac:false}]->(b) RETURN r",
                                                                  new Dictionary<string, object>(), CypherResultMode.Set);
@@ -137,7 +137,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     Console.WriteLine("greska");
                 }
-                return Page();
+                return RedirectToPage();
             }
             else
             {

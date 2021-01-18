@@ -37,6 +37,7 @@
             <div class="form-group">
                 <label for="inputAddress">URL slike</label>
                 <input type="text" class="form-control" id="inputAddress" asp-for="Slika" placeholder="URL slike">
+                <select asp-items="Model.listaStranicaAdmina" asp-for="odabranaStavka"></select>
             </div>
             <button class="btn text-red" type="submit" asp-page-handler="Objavi">Objavi</button>
         </div>

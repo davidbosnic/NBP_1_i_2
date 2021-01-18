@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using My_Face.Model;
 using Neo4j.Driver.V1;
 using Neo4jClient;
@@ -23,6 +24,13 @@ namespace My_Face.Pages.Pocetna_stranica
         [BindProperty] 
         
         public Korisnik Korisnik { get; set; }
+
+        [BindProperty]
+
+        public List<SelectListItem> listaStranicaAdmina { get; set; }
+
+        [BindProperty]
+        public int odabranaStavka { get; set; }
 
         public BoltGraphClient client { get; set; }
 
@@ -49,6 +57,30 @@ namespace My_Face.Pages.Pocetna_stranica
 
                     List<Korisnik> pom = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(query2).ToList();
                     Korisnik = pom[0];
+
+                    var q = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r: KORISNIKSTRANICA]->(b:Stranica) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND r.Admin = true  RETURN b",
+                                                                 new Dictionary<string, object>(), CypherResultMode.Set);
+
+                    List<My_Face.Model.Stranica> a = ((IRawGraphClient)client).ExecuteGetCypherResults<My_Face.Model.Stranica>(q).ToList();
+                    int n = -1;
+                    listaStranicaAdmina = new List<SelectListItem>();
+                    listaStranicaAdmina.Add(new SelectListItem
+                    {
+                        Value = n.ToString(),
+                        Text = "Objavi na svom profilu"
+                    });
+                    if (a!=null && a.Count!=0)
+                    {
+                        foreach (var item in a)
+                        {
+                         
+                            listaStranicaAdmina.Add(new SelectListItem
+                            {
+                                Value = item.ID.ToString(),
+                                Text = item.Naziv
+                            });
+                        }
+                    }
 
                 }
                 catch (Exception exc)
@@ -80,20 +112,40 @@ namespace My_Face.Pages.Pocetna_stranica
                     ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);
 
                     //Console.WriteLine(objava[0].Tekst);
-
-                    var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: KORISNIKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-
-                    ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
-
-                    var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKKORISNIK]->(b:Korisnik) WHERE b.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND r.Pratilac=true return a.ID",
-                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
-                    List<string> listaPratilaca = ((IRawGraphClient)client).ExecuteGetCypherResults<string>(query4).ToList();
-                    if (listaPratilaca != null)
+                    if (odabranaStavka == -1)
                     {
-                        foreach (var item in listaPratilaca)
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: KORISNIKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
+                                                                       new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
+
+                        var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKKORISNIK]->(b:Korisnik) WHERE b.ID = " + HttpContext.Session.GetString("idKorisnik") + " AND r.Pratilac=true return a.ID",
+                                                                       new Dictionary<string, object>(), CypherResultMode.Set);
+                        List<string> listaPratilaca = ((IRawGraphClient)client).ExecuteGetCypherResults<string>(query4).ToList();
+                        if (listaPratilaca != null)
                         {
-                            DataLayer.DataProvider.AddNotifikacija(idLog.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                            foreach (var item in listaPratilaca)
+                            {
+                                DataLayer.DataProvider.AddNotifikacija(idLog.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var query2 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Stranica), (b:Objava) WHERE a.ID = " + odabranaStavka + " AND b.ID = " + (Convert.ToInt32(maxIdPom) + 1) + " CREATE (a)-[r: STRANICAKOBJAVA {MojaObjava: true, PodeljenaObjava: false, Lajkovao: false}]->(b) RETURN r",
+                                                                       new Dictionary<string, object>(), CypherResultMode.Set);
+
+                        ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(query2);
+
+                        var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKKORISNIK]->(b:Stranica) WHERE b.ID = " + odabranaStavka + " AND r.Pratilac=true return a.ID",
+                                                                       new Dictionary<string, object>(), CypherResultMode.Set);
+                        List<string> listaPratilaca = ((IRawGraphClient)client).ExecuteGetCypherResults<string>(query4).ToList();
+                        if (listaPratilaca != null)
+                        {
+                            foreach (var item in listaPratilaca)
+                            {
+                                DataLayer.DataProvider.AddNotifikacija(idLog.ToString(), item, "testID", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                            }
                         }
                     }
 

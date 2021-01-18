@@ -106,7 +106,7 @@ namespace My_Face.Pages.Pocetna_stranica
                 {
                     client = DataLayer.Neo4jManager.GetClient();
                     string maxIdPom = getMaxId();
-                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + (Convert.ToInt32(maxIdPom) + 1) + ", Tekst:'" + TekstObjave + "', Slika:'" + ((Slika==null)?"": Slika) + "', DatumObjave: '" + DateTime.Now.ToString() + "'}) return n",
+                    var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Objava {ID:" + (Convert.ToInt32(maxIdPom) + 1) + ", Tekst:'" + TekstObjave + "', Slika:'" + ((Slika==null)?"": Slika) + "', DatumObjave: '" + DateTime.Now.ToString() + "', Lajkova: 0}) return n",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
 
                     ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query);

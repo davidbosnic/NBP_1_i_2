@@ -31,7 +31,7 @@
     Pratilaca : @Model.BrojPratilaca()
 }
 
-@if (Model.Objave != null)
+@if (Model.ObjaveKorisnika != null)
 {
     @foreach (var item in Model.ObjaveKorisnika)
     {
@@ -67,7 +67,7 @@
                         {
                             <div class="post-comment">
                                 <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
-                                <p><button href="#" class="profile-link">@item2.Korisnik.Ime </button> @item2.Tekst</p>
+                                <p>@item2.Korisnik.Ime @item2.Tekst</p>
                             </div>
                         }
 
@@ -82,6 +82,8 @@
 
         </form>
     }
+}
+@if (Model.ObjaveStranice != null) { 
     @foreach (var item in Model.ObjaveStranice)
     {
         <form method="post">
@@ -116,7 +118,7 @@
                         {
                             <div class="post-comment">
                                 <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
-                                <p><button href="#" class="profile-link">@item2.Korisnik.Ime </button> @item2.Tekst</p>
+                                <p>@item2.Korisnik.Ime@item2.Tekst</p>
                             </div>
                         }
 

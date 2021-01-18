@@ -56,7 +56,7 @@
                         <div>@item.Naziv</div>
                     </div><!--Post Date End-->
                     <div>
-                        <a class="btn text-red" asp-page="/Stranice/ProfilStranice" asp-route-id="@item.ID">Pogledaj stranicu</a>
+                        <a class="btn text-red" asp-page="/Stranica/ProfilStranice" asp-route-id="@item.ID">Pogledaj stranicu</a>
                         <button class="btn btn-primary" type="submit" asp-page-handler="Lajkuj" asp-route-id="@item.ID">Lajkuj stranicu</button>
                     </div>
                 }

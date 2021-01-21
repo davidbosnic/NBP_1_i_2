@@ -129,19 +129,19 @@
                 <label>Ime</label>
             </div>
             <div class="inputBox">
-                <input type="text"  asp-for="novi.Prezime" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <input type="text" asp-for="novi.Prezime" required onkeyup="this.setAttribute('value', this.value);" value="">
                 <label>Prezime</label>
             </div>
             <div class="inputBox">
-                <input type="date"  asp-for="novi.DatumRodjenja" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <input type="date" asp-for="novi.DatumRodjenja" required onkeyup="this.setAttribute('value', this.value);" value="">
                 <label>Datum rodjenja</label>
             </div>
             <div class="inputBox">
-                <input type="text"  asp-for="novi.Adresa" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <input type="text" asp-for="novi.Adresa" required onkeyup="this.setAttribute('value', this.value);" value="">
                 <label>Adresa</label>
             </div>
             <div class="inputBox">
-                <input type="text"  asp-for="novi.Slika" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <input type="text" asp-for="novi.Slika" required onkeyup="this.setAttribute('value', this.value);" value="">
                 <label>Slika</label>
             </div>
             <div class="inputBox">
@@ -151,4 +151,26 @@
             <input type="submit" asp-page-handler="Sign" name="sign-in" value="Sign In">
         </form>
     </div>
+
+    <div class="box">
+        <h2>Create page</h2>
+        <form method="post">
+            
+            <div class="inputBox">
+                <input type="text" asp-for="novaStranica.Naziv" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <label>Ime</label>
+            </div>
+            
+            <div class="inputBox">
+                <input type="text" asp-for="novaStranica.Slika" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <label>Slika</label>
+            </div>
+            <div class="inputBox">
+                <input type="text" asp-for="novaStranica.SlikaPozadina" required onkeyup="this.setAttribute('value', this.value);" value="">
+                <label>Pozadina</label>
+            </div>
+            <input type="submit" asp-page-handler="CreatePage"  value="Create page">
+        </form>
+    </div>
+
 </div>

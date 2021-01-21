@@ -18,7 +18,8 @@ namespace My_Face.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private BoltGraphClient client;
-
+        [BindProperty]
+        public My_Face.Model.Stranica novaStranica { get; set; }
         [BindProperty]
         public Korisnik novi { get; set; }
         [BindProperty]
@@ -70,6 +71,20 @@ namespace My_Face.Pages
                 ErrorMessage = "postoji takav nalog";
             }
             return Page();
+
+        }
+
+        public async Task<IActionResult> OnPostCreatePage()
+        {
+            
+                client = DataLayer.Neo4jManager.GetClient();
+                string maxIdPom = getMaxId();
+                var query = new Neo4jClient.Cypher.CypherQuery("CREATE (n:Stranica {ID:" + (Convert.ToInt32(maxIdPom) + 1) + ", Naziv:'" + novaStranica.Naziv + "', Slika:'" + ((novaStranica.Slika == null) ? "" : novaStranica.Slika) + "', DatumKreiranja: '" + DateTime.Now.ToString() + "', SlikaPozadina:'" + ((novaStranica.SlikaPozadina == null) ? "" : novaStranica.SlikaPozadina)+ "'}) return n",
+                                                               new Dictionary<string, object>(), CypherResultMode.Set);
+
+                ((IRawGraphClient)client).ExecuteGetCypherResults < My_Face.Model.Stranica > (query);
+          
+                return RedirectToPage();
 
         }
 

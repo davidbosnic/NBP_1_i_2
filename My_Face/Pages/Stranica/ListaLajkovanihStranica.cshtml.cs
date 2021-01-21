@@ -25,7 +25,11 @@ namespace My_Face.Pages.Stranica
 
         public Korisnik Korisnik { get; set; }
 
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
 
         public async Task<IActionResult> OnGet()
         {

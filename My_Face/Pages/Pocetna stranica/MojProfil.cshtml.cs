@@ -38,7 +38,11 @@ namespace My_Face.Pages.Pocetna_stranica
             ErrorMessage = "";
         }
 
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
 
         public async Task<IActionResult> OnGet()
         {
@@ -175,10 +179,6 @@ namespace My_Face.Pages.Pocetna_stranica
                         var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=false set b.Lajkova = " + (o[0].Lajkova - 1),
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                         ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
-                    }
-                    else
-                    {
-                        ErrorMessage = "";
                     }
                 }
                 catch (Exception exc)

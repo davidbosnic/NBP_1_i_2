@@ -64,7 +64,7 @@
         <div>@Model.zaPrikaz.DatumKreiranja</div>
         <div class="reaction">
 
-            <button type="submit" class="btn text-green" asp-route-id="@@Model.zaPrikaz.ID" asp-page-handler="LajkujStranicu"><i class="icon ion-thumbsup"></i></button>
+            <button type="submit" class="btn text-green" asp-route-id="@Model.zaPrikaz.ID" asp-page-handler="LajkujStranicu"><i class="icon ion-thumbsup"></i></button>
             @*<p>@item.Lajkova</p>*@
             <button type="submit" class="btn text-red" asp-route-id="@Model.zaPrikaz.ID" asp-page-handler="UnlajkujStranicu"><i class="fa fa-thumbs-down"></i></button>
             <input type="submit" asp-page-handler="Zaprati" asp-route-id="@Model.zaPrikaz.ID" value="zaprati" />
@@ -94,7 +94,7 @@
                 <img src="@Model.zaPrikaz.Slika" alt="user" class="profile-photo-md pull-left" />
                 <div class="post-detail">
                     <div class="user-info">
-                        <h5><a href="timeline.html" class="profile-link">@Model.zaPrikaz.Naziv</a> <span class="following">following</span></h5>
+                        <h5>@Model.zaPrikaz.Naziv<span class="following">following</span></h5>
                     </div>
                     <div class="reaction">
 
@@ -113,14 +113,14 @@
                     {
                         <div class="post-comment">
                             <img src="@item2.Korisnik.Slika" alt="" class="profile-photo-sm" />
-                            <p><a href="timeline.html" class="profile-link">@item2.Korisnik.Ime </a> @item2.Tekst</p>
+                            <p>@item2.Korisnik.Ime  @item2.Tekst</p>
                         </div>
                     }
 
                     <div class="post-comment">
                         <img src="@Model.zaPrikaz.Slika" alt="" class="profile-photo-sm" />
                         <input type="text" asp-for="Komentar" class="form-control" placeholder="Post a comment">
-                        <button type="submit" class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
+                        <button type="submit" class="btn text-red" asp-route-id="@item.ID" asp-page-handler="Komentarisi">Komentarisi</button>
                     </div>
                 </div>
             </div>

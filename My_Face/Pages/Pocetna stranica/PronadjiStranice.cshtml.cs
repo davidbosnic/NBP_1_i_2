@@ -37,7 +37,11 @@ namespace My_Face.Pages.Pocetna_stranica
         {
             ErrorMessage = "";
         }
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
         public async Task<IActionResult> OnGet()
         {
             int idLog;

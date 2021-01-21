@@ -41,7 +41,11 @@ namespace My_Face.Pages.Prijatelji
             ErrorMessage = "";
         }
 
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
 
         public async Task<IActionResult> OnGet(int? id)
         {
@@ -195,7 +199,7 @@ namespace My_Face.Pages.Prijatelji
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                     List<Objava> o = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query2).ToList();
 
-                    if (o != null && o.Count!=0)
+                    if (o != null && o.Count != 0)
                     {
                         var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=true set b.Lajkova = " + (o[0].Lajkova + 1),
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
@@ -203,6 +207,9 @@ namespace My_Face.Pages.Prijatelji
                     }
                     else
                     {
+                        var query4 = new Neo4jClient.Cypher.CypherQuery("MATCH (b:Objava) WHERE b.ID=" + id + " set b.Lajkova = b.Lajkova + 1 return b",
+                                                                   new Dictionary<string, object>(), CypherResultMode.Set);
+                        List<Objava> o2 = ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query4).ToList();
                         var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik), (b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " CREATE (a)-[r: KORISNIKOBJAVA {Lajkovao:true,MojaObjava:false,PodeljenaObjava:false}]->(b) RETURN b",
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                         ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
@@ -240,10 +247,6 @@ namespace My_Face.Pages.Prijatelji
                         var query3 = new Neo4jClient.Cypher.CypherQuery("MATCH (a:Korisnik)-[r:KORISNIKOBJAVA]->(b:Objava) WHERE a.ID = " + HttpContext.Session.GetString("idKorisnik") + " and b.ID=" + id + " set r.Lajkovao=false set b.Lajkova = " + (o[0].Lajkova - 1),
                                                                    new Dictionary<string, object>(), CypherResultMode.Set);
                         ((IRawGraphClient)client).ExecuteGetCypherResults<Objava>(query3);
-                    }
-                    else
-                    {
-                        ErrorMessage = "";
                     }
                 }
                 catch (Exception exc)

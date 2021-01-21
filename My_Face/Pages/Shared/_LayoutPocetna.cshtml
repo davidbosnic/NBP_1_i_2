@@ -29,19 +29,21 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html"><img src="~/images/logo.png" alt="logo" height="25px" width="100px" /></a>
+                    <img src="~/images/logo.png" alt="logo" height="25px" width="100px" />
                 </div>
                 @*../Pages/*@
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right main-menu">
-                        <li class="dropdown"><a asp-page="/Pocetna stranica/VremenskaLinija">Home</a></li>
-                        <li class="dropdown"><a asp-page="/Pocetna stranica/PronadjiPrijatelje">Search</a></li>
-                        <li class="dropdown"><a asp-page="/Pocetna stranica/IzmeniProfil">Change my face</a></li>
-                        <li class="dropdown"><a asp-page="/Pocetna stranica/PronadjiStranice">Search page</a></li>
-                        <li class="dropdown"><a asp-page="#">Logout</a></li>
-                    </ul>
-                </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right main-menu">
+                    <li class="dropdown"><a asp-page="/Pocetna stranica/VremenskaLinija">Home</a></li>
+                    <li class="dropdown"><a asp-page="/Pocetna stranica/PronadjiPrijatelje">SearchPeople</a></li>
+                    <li class="dropdown"><a asp-page="/Pocetna stranica/IzmeniProfil">Change my face</a></li>
+                    <li class="dropdown"><a asp-page="/Pocetna stranica/PronadjiStranice">Search page</a></li>
+                </ul>
+                <form method="post">
+                    <button asp-page-handler="LogOut">Logout</button>
+                </form>
+            </div>
             </div>
         </nav>
     </header>
@@ -65,8 +67,8 @@
                         <li class="dropdown">
                             <a asp-page="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends <span><img src="images/down-arrow.png" alt="" /></span></a>
                             <ul class="dropdown-menu login">
-                                <li><a asp-page="/Prijatelji/ListaBlokiranihPrijatelja">Blocked</a></li>
-                                <li><a asp-page="/Prijatelji/ListaPrijatelja">Others</a></li>
+                                <li><a style="background-color:palevioletred" asp-page="/Prijatelji/ListaBlokiranihPrijatelja">Blocked</a></li>
+                                <li><a style="background-color:palevioletred" asp-page="/Prijatelji/ListaPrijatelja">Others</a></li>
                             </ul>
                         </li>
                         <li><a asp-page="/Prijatelji/Obavestenja">Notifications</a></li>
@@ -92,8 +94,8 @@
                     <li class="dropdown">
                         <a asp-page="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends <span><img src="images/down-arrow.png" alt="" /></span></a>
                         <ul class="dropdown-menu login">
-                            <li><a asp-page="/Prijatelji/ListaBlokiranihPrijatelja">Blocked</a></li>
-                            <li><a asp-page="/Prijatelji/ListaPrijatelja">Others</a></li>
+                            <li><a style="background-color:palevioletred" asp-page="/Prijatelji/ListaBlokiranihPrijatelja">Blocked</a></li>
+                            <li><a style="background-color:palevioletred" asp-page="/Prijatelji/ListaPrijatelja">Others</a></li>
                         </ul>
                     </li>
                     <li><a asp-page="/Prijatelji/Obavestenja">Notifications</a></li>

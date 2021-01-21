@@ -52,7 +52,11 @@ namespace My_Face.Pages.Prijatelji
                 return RedirectToPage("../Index");
             }
         }
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
         public async Task<ActionResult> OnPostOdblokirajAsync(int id)
         {
             int idLog;

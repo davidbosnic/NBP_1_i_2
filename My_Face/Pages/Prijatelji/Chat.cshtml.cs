@@ -34,7 +34,11 @@ namespace My_Face.Pages.Prijatelji
         [BindProperty]
 
         public string tekstPoruke { get; set; }
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
         public async Task<IActionResult> OnGet()
         {
             int idLog;

@@ -18,6 +18,12 @@ namespace My_Face.Pages.Pocetna_stranica
         [BindProperty(SupportsGet = true)]
         public Korisnik Korisnik { get; set; }
 
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik","");
+            return RedirectToPage("../Index");
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             int idLog;

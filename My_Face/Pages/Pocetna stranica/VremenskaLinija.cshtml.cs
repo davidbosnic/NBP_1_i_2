@@ -21,7 +21,11 @@ namespace My_Face.Pages.Pocetna_stranica
         public List<StranicaObjava> ObjaveStranice { get; set; }
         [BindProperty(SupportsGet = true)]
         public String Komentarcic { get; set; }
-
+        public async Task<IActionResult> OnPostLogOutAsync()
+        {
+            HttpContext.Session.SetString("idKorisnik", "");
+            return RedirectToPage("../Index");
+        }
         public int BrojPratilaca()
         {
             client = DataLayer.Neo4jManager.GetClient();
@@ -44,7 +48,7 @@ namespace My_Face.Pages.Pocetna_stranica
                     List<Korisnik> korisnici = ((IRawGraphClient)client).ExecuteGetCypherResults<Korisnik>(queryKorisnik).ToList();
                     Korisnik = korisnici[0];
 
-                    var queryZaObjaveKorisnika = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m)-[r1:KORISNIKOBJAVA]->(p) where n.ID = " + idLog + " and r.Prijatelj=true and r.Blokiran=false return r1{Korisnik:m,Objava:p}", new Dictionary<string, object>(), CypherResultMode.Set);
+                    var queryZaObjaveKorisnika = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKKORISNIK]->(m)-[r1:KORISNIKOBJAVA]->(p) where n.ID = " + idLog + " and r.Prijatelj=true and r1.MojaObjava=true and r.Blokiran=false return r1{Korisnik:m,Objava:p}", new Dictionary<string, object>(), CypherResultMode.Set);
                     List<KorisnikObjava> Objave1 = ((IRawGraphClient)client).ExecuteGetCypherResults<KorisnikObjava>(queryZaObjaveKorisnika).ToList();
 
                     var queryZaObjaveStranice = new Neo4jClient.Cypher.CypherQuery("match (n)-[r:KORISNIKSTRANICA]->(m)-[r1:STRANICAOBJAVA]->(p) where n.ID = " + idLog + " and r.Lajkovao=true return r1{Stranica:m,Objava:p}", new Dictionary<string, object>(), CypherResultMode.Set);

@@ -49,7 +49,7 @@
                     <img src="@item.Korisnik.Slika" alt="user" class="profile-photo-md pull-left" />
                     <div class="post-detail">
                         <div class="user-info">
-                            <h5><a href="timeline.html" class="profile-link">@item.Korisnik.Ime @item.Korisnik.Prezime</a> <span class="following">following</span></h5>
+                            <h5>@item.Korisnik.Ime @item.Korisnik.Prezime <span class="following">following</span></h5>
                         </div>
                         <div class="reaction">
 
@@ -74,7 +74,7 @@
                         <div class="post-comment">
                             <img src="@Model.Korisnik.Slika" alt="" class="profile-photo-sm" />
                             <input type="text" asp-for="Komentarcic" class="form-control" placeholder="Post a comment">
-                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi">Komentarisi</button>
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                     <img src="@item.Stranica.Slika" alt="user" class="profile-photo-md pull-left" />
                     <div class="post-detail">
                         <div class="user-info">
-                            <h5><a href="timeline.html" class="profile-link">@item.Stranica.Naziv</a> <span class="following">following</span></h5>
+                            <h5>@item.Stranica.Naziv <span class="following">following</span></h5>
                         </div>
                         <div class="reaction">
 
@@ -125,7 +125,7 @@
                         <div class="post-comment">
                             <img src="@Model.Korisnik.Slika" alt="" class="profile-photo-sm" />
                             <input type="text" asp-for="Komentarcic" class="form-control" placeholder="Post a comment">
-                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi"><i class="fa fa-thumbs-down"></i></button>
+                            <button class="btn text-red" asp-route-id="@item.Objava.ID" asp-page-handler="Komentarisi">Komentarisi</button>
                         </div>
                     </div>
                 </div>
